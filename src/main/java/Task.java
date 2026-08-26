@@ -6,6 +6,7 @@ public class Task {
     protected String description;
     protected boolean isDone;
     protected String typeIcon;
+    protected String by;
 
     /**
      * Creates a task with the given description and type icon
@@ -20,6 +21,15 @@ public class Task {
     /** Creates a todo: a task with no date or time attached. */
     public Task(String description) {
         this(description, "T");
+    }
+
+    /**
+     * Creates a task of the given type that is due by the given date/time,
+     * e.g. a deadline.
+     */
+    public Task(String description, String typeIcon, String by) {
+        this(description, typeIcon);
+        this.by = by;
     }
 
     /** Returns the single-letter icon for this task's type. */
@@ -48,11 +58,15 @@ public class Task {
     }
 
     /**
-     * Returns this task as it should appear to the user,
-     * e.g. "[T][X] read book".
+     * Returns this task as it should appear to the user, e.g.
+     * "[T][X] read book" or "[D][ ] return book (by: Sunday)".
      */
     @Override
     public String toString() {
-        return "[" + typeIcon + "][" + getStatusIcon() + "] " + description;
+        String line = "[" + typeIcon + "][" + getStatusIcon() + "] " + description;
+        if (by != null) {
+            line += " (by: " + by + ")";
+        }
+        return line;
     }
 }

@@ -11,11 +11,11 @@ public class ZhangWei {
     private static int taskCount = 0;
 
     /**
-     * Stores a new task of the given type, confirms it,
+     * Stores the given task, confirms it,
      * and reports how many tasks are now stored.
      */
-    private static void addTask(String description, String typeIcon) {
-        tasks[taskCount] = new Task(description, typeIcon);
+    private static void addTask(Task task) {
+        tasks[taskCount] = task;
         taskCount++;
         System.out.println("Got it. I've added this task:");
         printTask(taskCount - 1);
@@ -80,6 +80,8 @@ public class ZhangWei {
             // The first word is the command; anything after it is its argument.
             String[] words = input.split(" ");
             String command = words[0];
+            // Everything after the command word, e.g. "return book /by Sunday".
+            String arguments = input.substring(command.length()).trim();
 
             if (command.equals("bye")) {
                 isRunning = false;
@@ -92,9 +94,13 @@ public class ZhangWei {
                 unmarkTask(Integer.parseInt(words[1]));
             } else if (command.equals("todo")) {
                 // Everything after the command word is the description.
-                addTask(input.substring(command.length()).trim(), "T");
+                addTask(new Task(arguments, "T"));
+            } else if (command.equals("deadline")) {
+                // "return book /by Sunday" -> description, then due date/time.
+                String[] parts = arguments.split("/by", 2);
+                addTask(new Task(parts[0].trim(), "D", parts[1].trim()));
             } else {
-                addTask(input, "T");
+                addTask(new Task(input, "T"));
             }
         }
         scan.close();
