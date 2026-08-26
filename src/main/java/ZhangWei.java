@@ -53,12 +53,15 @@ public class ZhangWei {
      * Returns the 0-based index of the task the given argument refers to.
      *
      * @param arguments the text typed after the command word, e.g. "2".
+     * @param command the command asking, used to phrase the examples.
      * @throws ZhangWeiException if it is missing, not a number,
      *     or does not refer to an existing task.
      */
-    private static int parseTaskIndex(String arguments) throws ZhangWeiException {
+    private static int parseTaskIndex(String arguments, Command command)
+            throws ZhangWeiException {
+        String example = "For example: " + command.getKeyword() + " 2";
         if (arguments.isEmpty()) {
-            throw new ZhangWeiException("Which task? For example: mark 2");
+            throw new ZhangWeiException("Which task? " + example);
         }
 
         int taskNumber;
@@ -66,7 +69,7 @@ public class ZhangWei {
             taskNumber = Integer.parseInt(arguments);
         } catch (NumberFormatException e) {
             throw new ZhangWeiException("\"" + arguments + "\" is not a task number. "
-                    + "For example: mark 2");
+                    + example);
         }
 
         if (tasks.isEmpty()) {
@@ -170,35 +173,27 @@ public class ZhangWei {
                 continue;
             }
 
-            // The first word is the command; anything after it is its argument.
-            String command = input.split(" ")[0];
-            // Everything after the command word, e.g. "return book /by Sunday".
-            String arguments = input.substring(command.length()).trim();
+            // The first word is the command keyword; the rest is its argument.
+            String keyword = input.split(" ")[0];
+            // Everything after the keyword, e.g. "return book /by Sunday".
+            String arguments = input.substring(keyword.length()).trim();
 
             // Anything the chatbot can explain to the user arrives here as a
             // ZhangWeiException, so one handler reports them all.
             try {
-                if (command.equals("bye")) {
+                Command command = Command.fromKeyword(keyword);
+                switch (command) {
+                case BYE -> {
                     isRunning = false;
                     System.out.println("Bye. Hope to see you again soon!");
-                } else if (command.equals("list")) {
-                    listTasks();
-                } else if (command.equals("mark")) {
-                    markTask(parseTaskIndex(arguments) + 1);
-                } else if (command.equals("unmark")) {
-                    unmarkTask(parseTaskIndex(arguments) + 1);
-                } else if (command.equals("delete")) {
-                    deleteTask(parseTaskIndex(arguments) + 1);
-                } else if (command.equals("todo")) {
-                    addTask(parseTodo(arguments));
-                } else if (command.equals("deadline")) {
-                    addTask(parseDeadline(arguments));
-                } else if (command.equals("event")) {
-                    addTask(parseEvent(arguments));
-                } else {
-                    throw new ZhangWeiException("I don't know the command \"" + command
-                            + "\". I understand: todo, deadline, event, list, mark, "
-                            + "unmark, delete, bye.");
+                }
+                case LIST -> listTasks();
+                case MARK -> markTask(parseTaskIndex(arguments, command) + 1);
+                case UNMARK -> unmarkTask(parseTaskIndex(arguments, command) + 1);
+                case DELETE -> deleteTask(parseTaskIndex(arguments, command) + 1);
+                case TODO -> addTask(parseTodo(arguments));
+                case DEADLINE -> addTask(parseDeadline(arguments));
+                case EVENT -> addTask(parseEvent(arguments));
                 }
             } catch (ZhangWeiException e) {
                 System.out.println(e.getMessage());

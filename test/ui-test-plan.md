@@ -339,7 +339,7 @@ bye
 Got it. I've added this task:
   [T][ ] read book
 Now you have 1 tasks in the list.
-Which task? For example: mark 2
+Which task? For example: delete 2
 There is no task 9. You have 1 tasks.
 Here are the tasks in your list:
 1.[T][ ] read book
@@ -351,5 +351,3 @@ Bye. Hope to see you again soon!
 - A blank line is ignored rather than reported, so it has no test case.
 - `/from` and `/to` given in the wrong order are not detected; the parser
   splits on either marker without checking which came first.
-- The "Which task?" message names `mark` as its example even when the command
-  was `delete`.
