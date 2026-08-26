@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class ZhangWei {
     public static void main(String[] args) {
         // Each backslash in the ASCII art must be written as \\ in a Java
@@ -12,6 +14,18 @@ public class ZhangWei {
 
         System.out.println("Hello! I'm ZhangWei.");
         System.out.println("What can I do for you?");
-        System.out.println("Bye. Hope to see you again soon!");
+
+        Scanner scan = new Scanner(System.in);
+        boolean isEcho = true;
+        while (isEcho) {
+            String input = scan.nextLine();
+            if (input.equals("bye")) {
+                isEcho = false;
+                System.out.println("Bye. Hope to see you again soon!");
+            } else {
+                System.out.println(input);
+            }
+        }
+        scan.close();
     }
 }
