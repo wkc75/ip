@@ -7,6 +7,8 @@ public class Task {
     protected boolean isDone;
     protected String typeIcon;
     protected String by;
+    protected String from;
+    protected String to;
 
     /**
      * Creates a task with the given description and type icon
@@ -30,6 +32,16 @@ public class Task {
     public Task(String description, String typeIcon, String by) {
         this(description, typeIcon);
         this.by = by;
+    }
+
+    /**
+     * Creates a task of the given type that runs between two date/times,
+     * e.g. an event.
+     */
+    public Task(String description, String typeIcon, String from, String to) {
+        this(description, typeIcon);
+        this.from = from;
+        this.to = to;
     }
 
     /** Returns the single-letter icon for this task's type. */
@@ -59,13 +71,17 @@ public class Task {
 
     /**
      * Returns this task as it should appear to the user, e.g.
-     * "[T][X] read book" or "[D][ ] return book (by: Sunday)".
+     * "[T][X] read book", "[D][ ] return book (by: Sunday)" or
+     * "[E][ ] project meeting (from: Mon 2pm to: 4pm)".
      */
     @Override
     public String toString() {
         String line = "[" + typeIcon + "][" + getStatusIcon() + "] " + description;
         if (by != null) {
             line += " (by: " + by + ")";
+        }
+        if (from != null) {
+            line += " (from: " + from + " to: " + to + ")";
         }
         return line;
     }
