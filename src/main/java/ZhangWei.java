@@ -10,11 +10,16 @@ public class ZhangWei {
     private static final Task[] tasks = new Task[MAX_TASKS];
     private static int taskCount = 0;
 
-    /** Stores a new task with the given description and confirms it. */
-    private static void addTask(String description) {
-        tasks[taskCount] = new Task(description);
+    /**
+     * Stores a new task of the given type, confirms it,
+     * and reports how many tasks are now stored.
+     */
+    private static void addTask(String description, String typeIcon) {
+        tasks[taskCount] = new Task(description, typeIcon);
         taskCount++;
-        System.out.println("added: " + description);
+        System.out.println("Got it. I've added this task:");
+        printTask(taskCount - 1);
+        System.out.println("Now you have " + taskCount + " tasks in the list.");
     }
 
     /** Prints every stored task, numbered from 1, with its done status. */
@@ -85,8 +90,11 @@ public class ZhangWei {
                 markTask(Integer.parseInt(words[1]));
             } else if (command.equals("unmark")) {
                 unmarkTask(Integer.parseInt(words[1]));
+            } else if (command.equals("todo")) {
+                // Everything after the command word is the description.
+                addTask(input.substring(command.length()).trim(), "T");
             } else {
-                addTask(input);
+                addTask(input, "T");
             }
         }
         scan.close();
