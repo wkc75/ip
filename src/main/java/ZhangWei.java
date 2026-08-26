@@ -94,17 +94,17 @@ public class ZhangWei {
                 unmarkTask(Integer.parseInt(words[1]));
             } else if (command.equals("todo")) {
                 // Everything after the command word is the description.
-                addTask(new Task(arguments, "T"));
+                addTask(new Todo(arguments));
             } else if (command.equals("deadline")) {
                 // "return book /by Sunday" -> description, then due date/time.
                 String[] parts = arguments.split("/by", 2);
-                addTask(new Task(parts[0].trim(), "D", parts[1].trim()));
+                addTask(new Deadline(parts[0].trim(), parts[1].trim()));
             } else if (command.equals("event")) {
                 // "project meeting /from Mon 2pm /to 4pm" -> description, start, end.
                 String[] parts = arguments.split("/from|/to");
-                addTask(new Task(parts[0].trim(), "E", parts[1].trim(), parts[2].trim()));
+                addTask(new Event(parts[0].trim(), parts[1].trim(), parts[2].trim()));
             } else {
-                addTask(new Task(input, "T"));
+                addTask(new Todo(input));
             }
         }
         scan.close();
