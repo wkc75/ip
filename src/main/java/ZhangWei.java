@@ -7,21 +7,49 @@ import java.util.Scanner;
 public class ZhangWei {
 
     private static final int MAX_TASKS = 100;
-    private static final String[] tasks = new String[MAX_TASKS];
+    private static final Task[] tasks = new Task[MAX_TASKS];
     private static int taskCount = 0;
 
-    // add task to tasks
-    private static void addTask(String task) {
-        tasks[taskCount] = task;
+    /** Stores a new task with the given description and confirms it. */
+    private static void addTask(String description) {
+        tasks[taskCount] = new Task(description);
         taskCount++;
-        System.out.println("added: " + task);
+        System.out.println("added: " + description);
     }
 
-    // list down all tasks
+    /** Prints every stored task, numbered from 1, with its done status. */
     private static void listTasks() {
+        System.out.println("Here are the tasks in your list:");
         for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + ". " + tasks[i]);
+            System.out.println((i + 1) + "." + tasks[i]);
         }
+    }
+
+    /** Prints the task at the given index, indented, as it appears to the user. */
+    private static void printTask(int index) {
+        System.out.println("  " + tasks[index]);
+    }
+
+    /**
+     * Marks the task with the given 1-based number as done and confirms it.
+     * Assumes the number refers to an existing task.
+     */
+    private static void markTask(int taskNumber) {
+        int index = taskNumber - 1;
+        tasks[index].markAsDone();
+        System.out.println("Nice! I've marked this task as done:");
+        printTask(index);
+    }
+
+    /**
+     * Marks the task with the given 1-based number as not done and confirms it.
+     * Assumes the number refers to an existing task.
+     */
+    private static void unmarkTask(int taskNumber) {
+        int index = taskNumber - 1;
+        tasks[index].markAsNotDone();
+        System.out.println("OK, I've marked this task as not done yet:");
+        printTask(index);
     }
 
     public static void main(String[] args) {
@@ -44,11 +72,19 @@ public class ZhangWei {
 
         while (isRunning) {
             String input = scan.nextLine();
-            if (input.equals("bye")) {
+            // The first word is the command; anything after it is its argument.
+            String[] words = input.split(" ");
+            String command = words[0];
+
+            if (command.equals("bye")) {
                 isRunning = false;
                 System.out.println("Bye. Hope to see you again soon!");
-            } else if (input.equals("list")) {
+            } else if (command.equals("list")) {
                 listTasks();
+            } else if (command.equals("mark")) {
+                markTask(Integer.parseInt(words[1]));
+            } else if (command.equals("unmark")) {
+                unmarkTask(Integer.parseInt(words[1]));
             } else {
                 addTask(input);
             }
