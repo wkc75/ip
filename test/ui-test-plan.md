@@ -211,7 +211,7 @@ bye
 ```
 
 ```text
-I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, bye.
+I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, delete, bye.
 Bye. Hope to see you again soon!
 ```
 
@@ -283,7 +283,64 @@ bye
 Got it. I've added this task:
   [T][ ] read book
 Now you have 1 tasks in the list.
-I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, bye.
+I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, delete, bye.
+Here are the tasks in your list:
+1.[T][ ] read book
+Bye. Hope to see you again soon!
+```
+
+### TC15 - Delete a task
+
+**Aim:** Verify `delete` removes the right task, shows it, and reports the new
+count, and that the remaining tasks are renumbered.
+
+```text
+todo read book
+deadline return book /by June 6th
+event project meeting /from Aug 6th 2pm /to 4pm
+delete 2
+list
+bye
+```
+
+```text
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+Got it. I've added this task:
+  [D][ ] return book (by: June 6th)
+Now you have 2 tasks in the list.
+Got it. I've added this task:
+  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+Now you have 3 tasks in the list.
+Noted. I've removed this task:
+  [D][ ] return book (by: June 6th)
+Now you have 2 tasks in the list.
+Here are the tasks in your list:
+1.[T][ ] read book
+2.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+Bye. Hope to see you again soon!
+```
+
+### TC16 - Delete with a bad task number
+
+**Aim:** Verify `delete` rejects a missing or out-of-range task number the same
+way `mark` does, and leaves the list untouched.
+
+```text
+todo read book
+delete
+delete 9
+list
+bye
+```
+
+```text
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 tasks in the list.
+Which task? For example: mark 2
+There is no task 9. You have 1 tasks.
 Here are the tasks in your list:
 1.[T][ ] read book
 Bye. Hope to see you again soon!
@@ -292,7 +349,7 @@ Bye. Hope to see you again soon!
 ## Known gaps
 
 - A blank line is ignored rather than reported, so it has no test case.
-- The task-list-full error (more than 100 tasks) is not exercised, as it would
-  need 101 commands in one case.
 - `/from` and `/to` given in the wrong order are not detected; the parser
   splits on either marker without checking which came first.
+- The "Which task?" message names `mark` as its example even when the command
+  was `delete`.

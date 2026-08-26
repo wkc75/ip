@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -6,39 +7,46 @@ import java.util.Scanner;
  */
 public class ZhangWei {
 
-    private static final int MAX_TASKS = 100;
-    private static final Task[] tasks = new Task[MAX_TASKS];
-    private static int taskCount = 0;
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     /**
      * Stores the given task, confirms it,
      * and reports how many tasks are now stored.
-     *
-     * @throws ZhangWeiException if the list is already full.
      */
-    private static void addTask(Task task) throws ZhangWeiException {
-        if (taskCount == MAX_TASKS) {
-            throw new ZhangWeiException("Your list is full: it holds at most "
-                    + MAX_TASKS + " tasks.");
-        }
-        tasks[taskCount] = task;
-        taskCount++;
+    private static void addTask(Task task) {
+        tasks.add(task);
         System.out.println("Got it. I've added this task:");
-        printTask(taskCount - 1);
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        printTask(task);
+        reportCount();
+    }
+
+    /**
+     * Removes the task with the given 1-based number and confirms it.
+     * Assumes the number refers to an existing task.
+     */
+    private static void deleteTask(int taskNumber) {
+        Task removed = tasks.remove(taskNumber - 1);
+        System.out.println("Noted. I've removed this task:");
+        printTask(removed);
+        reportCount();
+    }
+
+    /** Reports how many tasks are stored, after adding or removing one. */
+    private static void reportCount() {
+        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
     }
 
     /** Prints every stored task, numbered from 1, with its done status. */
     private static void listTasks() {
         System.out.println("Here are the tasks in your list:");
-        for (int i = 0; i < taskCount; i++) {
-            System.out.println((i + 1) + "." + tasks[i]);
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
 
-    /** Prints the task at the given index, indented, as it appears to the user. */
-    private static void printTask(int index) {
-        System.out.println("  " + tasks[index]);
+    /** Prints the given task, indented, as it appears to the user. */
+    private static void printTask(Task task) {
+        System.out.println("  " + task);
     }
 
     /**
@@ -61,13 +69,13 @@ public class ZhangWei {
                     + "For example: mark 2");
         }
 
-        if (taskCount == 0) {
+        if (tasks.isEmpty()) {
             throw new ZhangWeiException("You have no tasks yet, so there is no task "
                     + taskNumber + ".");
         }
-        if (taskNumber < 1 || taskNumber > taskCount) {
+        if (taskNumber < 1 || taskNumber > tasks.size()) {
             throw new ZhangWeiException("There is no task " + taskNumber + ". "
-                    + "You have " + taskCount + " tasks.");
+                    + "You have " + tasks.size() + " tasks.");
         }
         return taskNumber - 1;
     }
@@ -78,9 +86,9 @@ public class ZhangWei {
      */
     private static void markTask(int taskNumber) {
         int index = taskNumber - 1;
-        tasks[index].markAsDone();
+        tasks.get(index).markAsDone();
         System.out.println("Nice! I've marked this task as done:");
-        printTask(index);
+        printTask(tasks.get(index));
     }
 
     /**
@@ -89,9 +97,9 @@ public class ZhangWei {
      */
     private static void unmarkTask(int taskNumber) {
         int index = taskNumber - 1;
-        tasks[index].markAsNotDone();
+        tasks.get(index).markAsNotDone();
         System.out.println("OK, I've marked this task as not done yet:");
-        printTask(index);
+        printTask(tasks.get(index));
     }
 
     /**
@@ -179,6 +187,8 @@ public class ZhangWei {
                     markTask(parseTaskIndex(arguments) + 1);
                 } else if (command.equals("unmark")) {
                     unmarkTask(parseTaskIndex(arguments) + 1);
+                } else if (command.equals("delete")) {
+                    deleteTask(parseTaskIndex(arguments) + 1);
                 } else if (command.equals("todo")) {
                     addTask(parseTodo(arguments));
                 } else if (command.equals("deadline")) {
@@ -188,7 +198,7 @@ public class ZhangWei {
                 } else {
                     throw new ZhangWeiException("I don't know the command \"" + command
                             + "\". I understand: todo, deadline, event, list, mark, "
-                            + "unmark, bye.");
+                            + "unmark, delete, bye.");
                 }
             } catch (ZhangWeiException e) {
                 System.out.println(e.getMessage());
