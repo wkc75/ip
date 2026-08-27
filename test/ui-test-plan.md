@@ -19,6 +19,8 @@ output instead, including the banner.
 - Every input block must end with `bye`, otherwise the program never exits.
 - The first fenced block in a case is the input; the second is the expected output.
 - Leading and trailing blank lines are ignored; trailing spaces on a line are ignored.
+- Each case runs in its own empty working directory, so files the program
+  saves (such as `data/zhangwei.txt`) never leak from one case into the next.
 
 ## Test cases
 
