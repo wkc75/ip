@@ -19,6 +19,9 @@ _temp/
 /text-ui-test/ACTUAL.TXT
 text-ui-test/EXPECTED-UNIX.TXT
 
+# Runtime task data
+/data/
+
 # Agent skill folders (local only)
 /.codex/
 /.claude/

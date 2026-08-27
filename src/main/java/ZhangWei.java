@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class ZhangWei {
 
     private static final ArrayList<Task> tasks = new ArrayList<>();
+    private static final Storage storage = new Storage("./data/zhangwei.txt");
 
     /**
      * Stores the given task, confirms it,
@@ -18,6 +19,7 @@ public class ZhangWei {
         System.out.println("Got it. I've added this task:");
         printTask(task);
         reportCount();
+        save();
     }
 
     /**
@@ -29,6 +31,7 @@ public class ZhangWei {
         System.out.println("Noted. I've removed this task:");
         printTask(removed);
         reportCount();
+        save();
     }
 
     /** Reports how many tasks are stored, after adding or removing one. */
@@ -92,6 +95,7 @@ public class ZhangWei {
         tasks.get(index).markAsDone();
         System.out.println("Nice! I've marked this task as done:");
         printTask(tasks.get(index));
+        save();
     }
 
     /**
@@ -103,6 +107,7 @@ public class ZhangWei {
         tasks.get(index).markAsNotDone();
         System.out.println("OK, I've marked this task as not done yet:");
         printTask(tasks.get(index));
+        save();
     }
 
     /**
@@ -115,6 +120,7 @@ public class ZhangWei {
             throw new ZhangWeiException("A todo needs a description. "
                     + "For example: todo read book");
         }
+        rejectSeparator(arguments);
         return new Todo(arguments);
     }
 
@@ -130,6 +136,7 @@ public class ZhangWei {
             throw new ZhangWeiException("A deadline needs a description and a /by. "
                     + "For example: deadline return book /by Sunday");
         }
+        rejectSeparator(arguments);
         return new Deadline(parts[0].trim(), parts[1].trim());
     }
 
@@ -146,10 +153,70 @@ public class ZhangWei {
             throw new ZhangWeiException("An event needs a description, a /from and a /to. "
                     + "For example: event project meeting /from Mon 2pm /to 4pm");
         }
+        rejectSeparator(arguments);
         return new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
     }
 
+    /**
+     * Rejects text containing the character that separates fields in the save
+     * file. Allowing it would split one task across several fields, so the task
+     * would come back wrong (or not at all) the next time the chatbot starts.
+     *
+     * @throws ZhangWeiException if the text contains "|".
+     */
+    private static void rejectSeparator(String text) throws ZhangWeiException {
+        if (text.contains("|")) {
+            throw new ZhangWeiException("A task cannot contain \"|\", because "
+                    + "that character separates the fields in the save file.");
+        }
+    }
+
+    /**
+     * Saves the current task list, reporting a failure to the user instead of
+     * ending the session. A chatbot that still works but cannot save is far
+     * more useful than one that stops at the first disk problem.
+     */
+    private static void save() {
+        try {
+            storage.saveTasks(tasks);
+        } catch (ZhangWeiException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Fills the task list from the save file.
+     *
+     * @return a message to show the user if anything was wrong with the save
+     *     file, or null if the load was clean.
+     */
+    private static String loadSavedTasks() {
+        try {
+            Storage.LoadResult loaded = storage.loadTasks();
+            tasks.addAll(loaded.tasks());
+            if (loaded.skippedLines() == 0) {
+                return null;
+            }
+
+            String message = "I could not understand " + loaded.skippedLines()
+                    + " line(s) in your save file, so I skipped them.";
+            if (loaded.backupPath() != null) {
+                message += " The original file is kept at " + loaded.backupPath() + ".";
+            }
+            return message;
+        } catch (ZhangWeiException e) {
+            // The file exists but is unreadable. Starting empty keeps the
+            // chatbot usable; the file is left untouched so it can be repaired.
+            return e.getMessage() + " Starting with an empty task list.";
+        }
+    }
+
     public static void main(String[] args) {
+        // Tasks are loaded before anything is printed, but any complaint
+        // about the save file is shown after the greeting, where the user
+        // is actually looking.
+        String loadMessage = loadSavedTasks();
+
         // Each backslash in the ASCII art must be written as \\ in a Java
         // string literal, because \ starts an escape sequence.
         String banner = " ______                     __        __   _ \n"
@@ -162,6 +229,9 @@ public class ZhangWei {
 
         System.out.println("Hello! I'm ZhangWei.");
         System.out.println("What can I do for you?");
+        if (loadMessage != null) {
+            System.out.println(loadMessage);
+        }
 
         Scanner scan = new Scanner(System.in);
 
