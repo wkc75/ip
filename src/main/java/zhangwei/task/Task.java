@@ -1,3 +1,5 @@
+package zhangwei.task;
+
 /**
  * A task tracked by the chatbot: a description plus whether it is done.
  * Subclasses add whatever extra detail their task type needs.

@@ -1,3 +1,11 @@
+package zhangwei.command;
+
+import zhangwei.ZhangWeiException;
+import zhangwei.storage.Storage;
+import zhangwei.task.Task;
+import zhangwei.task.TaskList;
+import zhangwei.ui.Ui;
+
 /**
  * Adds one already-built task to the list, whatever its type.
  *

@@ -173,7 +173,7 @@ public class PersistenceTest {
                 Path.of(System.getProperty("java.home"), "bin", "java").toString(),
                 "-cp",
                 System.getProperty("java.class.path"),
-                "ZhangWei")
+                "zhangwei.ZhangWei")
                 .directory(workingDirectory.toFile())
                 .redirectErrorStream(true)
                 .start();
