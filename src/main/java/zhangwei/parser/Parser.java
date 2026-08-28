@@ -9,6 +9,7 @@ import zhangwei.command.Command;
 import zhangwei.command.CommandType;
 import zhangwei.command.DeleteCommand;
 import zhangwei.command.ExitCommand;
+import zhangwei.command.FindCommand;
 import zhangwei.command.ListCommand;
 import zhangwei.command.MarkCommand;
 import zhangwei.command.UnmarkCommand;
@@ -51,6 +52,7 @@ public class Parser {
         return switch (type) {
         case BYE -> new ExitCommand();
         case LIST -> new ListCommand();
+        case FIND -> new FindCommand(parseKeyword(arguments));
         case MARK -> new MarkCommand(parseTaskNumber(arguments, type));
         case UNMARK -> new UnmarkCommand(parseTaskNumber(arguments, type));
         case DELETE -> new DeleteCommand(parseTaskNumber(arguments, type));
@@ -82,6 +84,25 @@ public class Parser {
             throw new ZhangWeiException("\"" + arguments + "\" is not a task number. "
                     + example);
         }
+    }
+
+    /**
+     * Returns the keyword the user wants to search for.
+     *
+     * <p>The keyword is taken whole rather than split into words, so
+     * "find return book" looks for the phrase "return book".
+     *
+     * @param arguments the text typed after "find", e.g. "book".
+     * @return the keyword, with the surrounding spaces already removed.
+     * @throws ZhangWeiException if no keyword was given, since an empty
+     *     keyword matches every task and so answers nothing.
+     */
+    private static String parseKeyword(String arguments) throws ZhangWeiException {
+        if (arguments.isEmpty()) {
+            throw new ZhangWeiException("What should I search for? "
+                    + "For example: find book");
+        }
+        return arguments;
     }
 
     /**

@@ -19,6 +19,7 @@ import zhangwei.ZhangWeiException;
 import zhangwei.command.AddCommand;
 import zhangwei.command.DeleteCommand;
 import zhangwei.command.ExitCommand;
+import zhangwei.command.FindCommand;
 import zhangwei.command.ListCommand;
 import zhangwei.command.MarkCommand;
 import zhangwei.command.UnmarkCommand;
@@ -102,6 +103,25 @@ public class ParserTest {
     @Test
     public void parse_byeWithTrailingSpaces_exitCommandReturned() throws ZhangWeiException {
         assertInstanceOf(ExitCommand.class, Parser.parse("bye   "));
+    }
+
+    // ---------- find ----------
+
+    @Test
+    public void parse_findWithKeyword_findCommandReturned() throws ZhangWeiException {
+        assertInstanceOf(FindCommand.class, Parser.parse("find book"));
+    }
+
+    @Test
+    public void parse_findWithoutKeyword_exceptionThrown() {
+        ZhangWeiException e = assertThrows(ZhangWeiException.class,
+                () -> Parser.parse("find"));
+        assertTrue(e.getMessage().contains("What should I search for?"));
+    }
+
+    @Test
+    public void parse_findWithOnlySpaces_exceptionThrown() {
+        assertThrows(ZhangWeiException.class, () -> Parser.parse("find    "));
     }
 
     // ---------- unknown input ----------
