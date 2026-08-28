@@ -28,6 +28,35 @@ Unless the user says otherwise, assume that you are assisting a student working 
 
 Ensure that Java 25 is used when running the application or build tasks. On macOS, use `sdk use java 25.0.3.fx-zulu` to switch to Java 25 if needed.
 
+## Coding standard
+
+**All Java code in this repository must follow the se-education.org Java coding
+standard at the _intermediate_ level**
+(<https://se-education.org/guides/conventions/java/intermediate.html>). The full
+rule set is recorded in the project skill `seedu-java-coding-standard`
+(`.claude/skills/seedu-java-coding-standard/SKILL.md`, mirrored under
+`.codex/skills/`). Read that skill before writing or editing any `.java` file,
+and check the changed lines against its self-check list before reporting the
+edit as done.
+
+This is not optional and not limited to new files: it applies to `src/main/java`
+and `src/test/java` alike, to generated snippets shown in chat, and to any
+existing code you are already modifying. If a suggested change would break a
+rule, choose a different design rather than breaking the rule.
+
+The points most often got wrong here:
+
+* 4-space indent, no tabs, 120-character hard line limit.
+* Explicit imports, grouped (static, `java`, `javax`, third party, project) with
+  a blank line between groups.
+* Every `if`/`for`/`while` body braced, opening brace on the same line.
+* No `public` non-constant fields; fields `private final` where possible.
+* Javadoc on every public class and non-trivial public method, first sentence a
+  third-person verb phrase ("Returns ...", "Adds ..."), tags punctuated.
+* Booleans named `isX`/`hasX`/`wasX`, collections plural, acronyms not
+  uppercased (`parseHtml`, not `parseHTML`).
+* Test methods named `featureUnderTest_testScenario_expectedBehavior()`.
+
 ## Testing
 
 Tests are JUnit 5 (Jupiter) and run with `./gradlew test`.
@@ -72,6 +101,25 @@ afterwards.** Concretely, whenever you change production code:
 
 ## Git
 
-Use lightweight tags unless the user requests an annotated tag.
-When proposing or creating a commit message, include enough detail to explain the rationale for the change.
-Do not commit or push unless explicitly asked.
+**All commits and branches in this repository must follow the se-education.org
+Git conventions** (<https://se-education.org/guides/conventions/git.html>). The
+full rule set is recorded in the project skill `seedu-git-standard`
+(`.claude/skills/seedu-git-standard/SKILL.md`, mirrored under `.codex/skills/`).
+Read that skill before drafting any commit message or creating any branch, and
+propose only messages that already comply -- never a draft that has to be fixed
+afterwards.
+
+In short:
+
+* Subject line: imperative mood, capitalised, no trailing period, 50 characters
+  preferred and 72 the hard limit. An optional `<scope>:` prefix is allowed.
+* Body: required for any non-trivial commit, separated from the subject by a
+  blank line, wrapped at 72 characters, explaining *what* and *why* rather than
+  *how*.
+* Branch names: meaningful kebab-case keywords, prefixed with the issue number
+  when the branch addresses an issue (`1234-ui-freeze-error`).
+
+Also, for this project:
+
+* Use lightweight tags unless the user requests an annotated tag.
+* Do not commit or push unless explicitly asked.
