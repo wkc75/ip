@@ -89,7 +89,7 @@ public class Storage {
      *
      * @throws ZhangWeiException if the tasks could not be written.
      */
-    public void saveTasks(List<Task> tasks) throws ZhangWeiException {
+    public void saveTasks(TaskList tasks) throws ZhangWeiException {
         try {
             // getParent() is null for a bare file name such as "tasks.txt",
             // in which case there is no folder to create.
@@ -99,7 +99,7 @@ public class Storage {
             }
 
             List<String> lines = new ArrayList<>();
-            for (Task task : tasks) {
+            for (Task task : tasks.asList()) {
                 lines.add(formatTask(task));
             }
             Files.write(filePath, lines);
