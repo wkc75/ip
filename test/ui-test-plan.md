@@ -57,13 +57,13 @@ Bye. Hope to see you again soon!
 **Aim:** Verify `deadline` parses the `/by` argument and shows it in parentheses.
 
 ```text
-deadline return book /by Sunday
+deadline return book /by 2019-12-02
 bye
 ```
 
 ```text
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Dec 2 2019)
 Now you have 1 tasks in the list.
 Bye. Hope to see you again soon!
 ```
@@ -73,13 +73,13 @@ Bye. Hope to see you again soon!
 **Aim:** Verify `event` parses both `/from` and `/to` arguments.
 
 ```text
-event project meeting /from Mon 2pm /to 4pm
+event project meeting /from 2019-12-03 /to 2019-12-04
 bye
 ```
 
 ```text
 Got it. I've added this task:
-  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+  [E][ ] project meeting (from: Dec 3 2019 to: Dec 4 2019)
 Now you have 1 tasks in the list.
 Bye. Hope to see you again soon!
 ```
@@ -104,8 +104,8 @@ Bye. Hope to see you again soon!
 
 ```text
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-06-06
+event project meeting /from 2019-08-06 /to 2019-08-07
 list
 bye
 ```
@@ -115,15 +115,15 @@ Got it. I've added this task:
   [T][ ] read book
 Now you have 1 tasks in the list.
 Got it. I've added this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 6 2019)
 Now you have 2 tasks in the list.
 Got it. I've added this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 6 2019 to: Aug 7 2019)
 Now you have 3 tasks in the list.
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[D][ ] return book (by: June 6th)
-3.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+2.[D][ ] return book (by: Jun 6 2019)
+3.[E][ ] project meeting (from: Aug 6 2019 to: Aug 7 2019)
 Bye. Hope to see you again soon!
 ```
 
@@ -227,7 +227,7 @@ bye
 ```
 
 ```text
-A deadline needs a description and a /by. For example: deadline return book /by Sunday
+A deadline needs a description and a /by. For example: deadline return book /by 2019-12-02
 Bye. Hope to see you again soon!
 ```
 
@@ -241,7 +241,7 @@ bye
 ```
 
 ```text
-An event needs a description, a /from and a /to. For example: event project meeting /from Mon 2pm /to 4pm
+An event needs a description, a /from and a /to. For example: event project meeting /from 2019-12-03 /to 2019-12-04
 Bye. Hope to see you again soon!
 ```
 
@@ -298,8 +298,8 @@ count, and that the remaining tasks are renumbered.
 
 ```text
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-06-06
+event project meeting /from 2019-08-06 /to 2019-08-07
 delete 2
 list
 bye
@@ -310,17 +310,17 @@ Got it. I've added this task:
   [T][ ] read book
 Now you have 1 tasks in the list.
 Got it. I've added this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 6 2019)
 Now you have 2 tasks in the list.
 Got it. I've added this task:
-  [E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+  [E][ ] project meeting (from: Aug 6 2019 to: Aug 7 2019)
 Now you have 3 tasks in the list.
 Noted. I've removed this task:
-  [D][ ] return book (by: June 6th)
+  [D][ ] return book (by: Jun 6 2019)
 Now you have 2 tasks in the list.
 Here are the tasks in your list:
 1.[T][ ] read book
-2.[E][ ] project meeting (from: Aug 6th 2pm to: 4pm)
+2.[E][ ] project meeting (from: Aug 6 2019 to: Aug 7 2019)
 Bye. Hope to see you again soon!
 ```
 
@@ -345,6 +345,27 @@ Which task? For example: delete 2
 There is no task 9. You have 1 tasks.
 Here are the tasks in your list:
 1.[T][ ] read book
+Bye. Hope to see you again soon!
+```
+
+### TC17 - Reject invalid dates without ending the session
+
+**Aim:** Verify malformed and impossible dates are explained, no invalid task is
+stored, and the chatbot continues accepting commands.
+
+```text
+deadline return book /by Sunday
+event meeting /from Monday /to 2019-12-04
+event meeting /from 2019-12-03 /to 2019-02-30
+list
+bye
+```
+
+```text
+The /by date must use yyyy-MM-dd, for example 2019-12-02.
+The /from date must use yyyy-MM-dd, for example 2019-12-02.
+The /to date must use yyyy-MM-dd, for example 2019-12-02.
+Here are the tasks in your list:
 Bye. Hope to see you again soon!
 ```
 

@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +11,7 @@ import java.util.List;
  * Loads and saves the task list using a text file on the hard disk.
  *
  * <p>Each task occupies one line, with fields separated by " | ", e.g.
- * {@code D | 0 | return book | June 6th}. The first field is the task type,
+ * {@code D | 0 | return book | 2019-06-06}. The first field is the task type,
  * the second is the done status (1 or 0), and the rest depend on the type.
  */
 public class Storage {
@@ -165,13 +167,13 @@ public class Storage {
         }
         case "D" -> {
             requireFieldCount(fields, 4);
-            yield new Deadline(description, requireText(fields[3], "by"));
+            yield new Deadline(description, parseDate(fields[3], "by"));
         }
         case "E" -> {
             requireFieldCount(fields, 5);
             yield new Event(description,
-                    requireText(fields[3], "from"),
-                    requireText(fields[4], "to"));
+                    parseDate(fields[3], "from"),
+                    parseDate(fields[4], "to"));
         }
         default -> throw new ZhangWeiException("unknown task type \"" + type + "\"");
         };
@@ -180,6 +182,21 @@ public class Storage {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Parses a saved date written in the ISO {@code yyyy-MM-dd} format.
+     *
+     * @throws ZhangWeiException if the field is blank, malformed, or impossible.
+     */
+    private LocalDate parseDate(String field, String fieldName)
+            throws ZhangWeiException {
+        String date = requireText(field, fieldName);
+        try {
+            return LocalDate.parse(date);
+        } catch (DateTimeParseException e) {
+            throw new ZhangWeiException(fieldName + " must use yyyy-MM-dd");
+        }
     }
 
     /**
