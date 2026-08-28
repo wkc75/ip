@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -133,6 +134,61 @@ public class TaskListTest {
         // The view is read-only so that every change still goes through TaskList.
         List<Task> view = listOf(1).asList();
         assertThrows(UnsupportedOperationException.class, () -> view.add(new Todo("x")));
+    }
+
+    @Test
+    public void find_keywordInSeveralDescriptions_matchingTasksReturnedInOrder() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("read book"));
+        tasks.add(new Todo("buy groceries"));
+        tasks.add(new Todo("return book"));
+
+        List<Task> matches = tasks.find("book");
+
+        assertEquals(2, matches.size());
+        assertEquals("read book", matches.get(0).getDescription());
+        assertEquals("return book", matches.get(1).getDescription());
+    }
+
+    @Test
+    public void find_keywordWithDifferentCase_matchingTaskReturned() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("Read Book"));
+
+        List<Task> matches = tasks.find("book");
+
+        assertEquals(1, matches.size());
+    }
+
+    @Test
+    public void find_keywordOnlyInDeadlineDate_noTaskReturned() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Deadline("return assignment", LocalDate.of(2019, 12, 2)));
+
+        List<Task> matches = tasks.find("Dec");
+
+        assertTrue(matches.isEmpty());
+    }
+
+    @Test
+    public void find_noMatchingDescription_emptyListReturned() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("read book"));
+
+        List<Task> matches = tasks.find("groceries");
+
+        assertTrue(matches.isEmpty());
+    }
+
+    @Test
+    public void find_returnedListModified_exceptionThrown() {
+        TaskList tasks = new TaskList();
+        tasks.add(new Todo("read book"));
+
+        List<Task> matches = tasks.find("book");
+
+        assertThrows(UnsupportedOperationException.class,
+                () -> matches.add(new Todo("another book")));
     }
 
     @Test

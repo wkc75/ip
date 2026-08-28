@@ -1,5 +1,6 @@
 package zhangwei.ui;
 
+import java.util.List;
 import java.util.Scanner;
 
 import zhangwei.task.Task;
@@ -132,6 +133,27 @@ public class Ui {
         System.out.println("Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
             System.out.println(i + "." + tasks.get(i));
+        }
+    }
+
+    /**
+     * Prints the tasks that matched a search, numbered from 1 among the
+     * matches rather than by their position in the full list.
+     *
+     * <p>An empty result gets its own sentence instead of a heading with
+     * nothing under it, which would read as though something went wrong.
+     *
+     * @param matches the matching tasks, in the order they appear in the list.
+     */
+    public void showMatchingTasks(List<Task> matches) {
+        if (matches.isEmpty()) {
+            System.out.println("There are no matching tasks in your list.");
+            return;
+        }
+
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < matches.size(); i++) {
+            System.out.println((i + 1) + "." + matches.get(i));
         }
     }
 

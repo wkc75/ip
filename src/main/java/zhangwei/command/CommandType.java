@@ -23,6 +23,8 @@ public enum CommandType {
     EVENT("event"),
     /** Shows every task currently in the list. */
     LIST("list"),
+    /** Shows the tasks whose description contains a given keyword. */
+    FIND("find"),
     /** Marks a numbered task as done. */
     MARK("mark"),
     /** Marks a numbered task as not done. */

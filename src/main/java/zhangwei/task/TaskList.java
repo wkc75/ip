@@ -94,6 +94,29 @@ public class TaskList {
     }
 
     /**
+     * Returns the tasks whose description contains the given keyword, in the
+     * order they appear in this list.
+     *
+     * <p>The match ignores case and does not have to fall on a word boundary,
+     * so "book" finds "Booking" too. Only the description is searched: the
+     * keyword is a word the user wrote, and dates are already searchable by
+     * reading the list.
+     *
+     * @param keyword the word or phrase to look for.
+     * @return an unmodifiable list of the matching tasks, empty if none match.
+     */
+    public List<Task> find(String keyword) {
+        String lowerCaseKeyword = keyword.toLowerCase();
+        List<Task> matches = new ArrayList<>();
+        for (Task task : tasks) {
+            if (task.getDescription().toLowerCase().contains(lowerCaseKeyword)) {
+                matches.add(task);
+            }
+        }
+        return Collections.unmodifiableList(matches);
+    }
+
+    /**
      * Checks that the given 1-based number refers to a task in this list.
      *
      * @param taskNumber the 1-based number the user typed.
