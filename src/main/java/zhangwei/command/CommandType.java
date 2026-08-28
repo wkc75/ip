@@ -15,22 +15,39 @@ import zhangwei.ZhangWeiException;
  * each of them does.
  */
 public enum CommandType {
+    /** Adds a task with no date attached to it. */
     TODO("todo"),
+    /** Adds a task that must be done by a given date. */
     DEADLINE("deadline"),
+    /** Adds a task that runs between two given dates. */
     EVENT("event"),
+    /** Shows every task currently in the list. */
     LIST("list"),
+    /** Marks a numbered task as done. */
     MARK("mark"),
+    /** Marks a numbered task as not done. */
     UNMARK("unmark"),
+    /** Removes a numbered task from the list. */
     DELETE("delete"),
+    /** Ends the session. */
     BYE("bye");
 
     private final String keyword;
 
+    /**
+     * Creates a command type invoked by the given keyword.
+     *
+     * @param keyword the word the user types to invoke this command.
+     */
     CommandType(String keyword) {
         this.keyword = keyword;
     }
 
-    /** Returns the word the user types to invoke this command. */
+    /**
+     * Returns the word the user types to invoke this command.
+     *
+     * @return the keyword of this command, e.g. "deadline".
+     */
     public String getKeyword() {
         return keyword;
     }
@@ -38,7 +55,10 @@ public enum CommandType {
     /**
      * Returns the command invoked by the given keyword.
      *
-     * @throws ZhangWeiException if no command uses that keyword.
+     * @param keyword the first word of the line the user typed.
+     * @return the command type using that keyword.
+     * @throws ZhangWeiException if no command uses that keyword, listing the
+     *     keywords that would have worked.
      */
     public static CommandType fromKeyword(String keyword) throws ZhangWeiException {
         for (CommandType command : values()) {
@@ -50,7 +70,11 @@ public enum CommandType {
                 + "\". I understand: " + listKeywords() + ".");
     }
 
-    /** Returns every keyword, comma separated, in the order declared above. */
+    /**
+     * Returns every keyword, comma separated, in the order declared above.
+     *
+     * @return the keywords of all commands, e.g. "todo, deadline, event".
+     */
     private static String listKeywords() {
         StringBuilder keywords = new StringBuilder();
         for (CommandType command : values()) {

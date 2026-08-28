@@ -7,10 +7,9 @@ import zhangwei.task.TaskList;
 import zhangwei.ui.Ui;
 
 /**
- * ZhangWei
- * This is a chatbot named ZhangWei
+ * Entry point of ZhangWei, a chatbot that keeps track of the user's tasks.
  *
- * <p>This class now only wires the other classes together and runs the command
+ * <p>This class only wires the other classes together and runs the command
  * loop: the {@link Ui} talks to the user, the {@link Parser} makes sense of
  * what was typed, each {@link Command} carries one instruction out, the
  * {@link TaskList} holds the tasks and the {@link Storage} keeps them on disk.
@@ -35,6 +34,9 @@ public class ZhangWei {
      * an empty list and says so, leaving the file untouched so it can be
      * repaired, because a chatbot that still works is more useful than one
      * that refuses to start.
+     *
+     * @param filePath path of the text file the tasks are loaded from and
+     *     saved to, e.g. "./data/zhangwei.txt".
      */
     public ZhangWei(String filePath) {
         this.ui = new Ui();
@@ -88,6 +90,11 @@ public class ZhangWei {
         ui.close();
     }
 
+    /**
+     * Starts the chatbot with its default save file.
+     *
+     * @param args command line arguments, which this chatbot does not use.
+     */
     public static void main(String[] args) {
         new ZhangWei("./data/zhangwei.txt").run();
     }
