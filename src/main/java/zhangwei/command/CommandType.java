@@ -1,3 +1,7 @@
+package zhangwei.command;
+
+import zhangwei.ZhangWeiException;
+
 /**
  * The commands the chatbot understands, each paired with the keyword the user
  * types for it.

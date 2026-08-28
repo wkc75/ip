@@ -1,3 +1,11 @@
+package zhangwei;
+
+import zhangwei.command.Command;
+import zhangwei.parser.Parser;
+import zhangwei.storage.Storage;
+import zhangwei.task.TaskList;
+import zhangwei.ui.Ui;
+
 /**
  * ZhangWei
  * This is a chatbot named ZhangWei

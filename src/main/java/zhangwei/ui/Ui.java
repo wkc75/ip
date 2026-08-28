@@ -1,4 +1,9 @@
+package zhangwei.ui;
+
 import java.util.Scanner;
+
+import zhangwei.task.Task;
+import zhangwei.task.TaskList;
 
 /**
  * Deals with everything the user sees and types: it reads commands from the

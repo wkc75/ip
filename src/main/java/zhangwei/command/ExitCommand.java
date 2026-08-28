@@ -1,3 +1,9 @@
+package zhangwei.command;
+
+import zhangwei.storage.Storage;
+import zhangwei.task.TaskList;
+import zhangwei.ui.Ui;
+
 /** Says goodbye and ends the session. */
 public class ExitCommand extends Command {
 

@@ -1,3 +1,5 @@
+package zhangwei;
+
 /**
  * An error the chatbot itself detects and can explain to the user,
  * such as a command it does not recognise or a missing argument.

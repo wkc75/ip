@@ -1,3 +1,10 @@
+package zhangwei.command;
+
+import zhangwei.ZhangWeiException;
+import zhangwei.storage.Storage;
+import zhangwei.task.TaskList;
+import zhangwei.ui.Ui;
+
 /**
  * One instruction the user gave, ready to be carried out.
  *

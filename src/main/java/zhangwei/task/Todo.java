@@ -1,3 +1,5 @@
+package zhangwei.task;
+
 /**
  * A task with no date or time attached to it, e.g. "borrow book".
  */

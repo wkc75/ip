@@ -1,3 +1,11 @@
+package zhangwei.command;
+
+import zhangwei.ZhangWeiException;
+import zhangwei.storage.Storage;
+import zhangwei.task.Task;
+import zhangwei.task.TaskList;
+import zhangwei.ui.Ui;
+
 /** Removes the task with the given number from the list. */
 public class DeleteCommand extends Command {
 

@@ -7,7 +7,7 @@ compares the console output against the expected output.
 ## Configuration
 
 - Source directory: `src/main/java`
-- Main class: `ZhangWei`
+- Main class: `zhangwei.ZhangWei`
 - Comparison starts after the line: `What can I do for you?`
 
 The banner and greeting are printed on every run, so comparison starts after
