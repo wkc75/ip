@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import zhangwei.ZhangWeiException;
 import zhangwei.task.Deadline;
@@ -30,6 +31,30 @@ public class Storage {
 
     /** Appended to the save file's name when a copy is kept of a damaged file. */
     private static final String BACKUP_SUFFIX = ".corrupt";
+
+    /** Marks a saved line as a todo. */
+    private static final String TYPE_TODO = "T";
+
+    /** Marks a saved line as a deadline. */
+    private static final String TYPE_DEADLINE = "D";
+
+    /** Marks a saved line as an event. */
+    private static final String TYPE_EVENT = "E";
+
+    /** The status field of a task saved as done. */
+    private static final String STATUS_DONE = "1";
+
+    /** The status field of a task saved as not done. */
+    private static final String STATUS_NOT_DONE = "0";
+
+    /** How many fields a saved todo has: type, status, description. */
+    private static final int FIELD_COUNT_TODO = 3;
+
+    /** How many fields a saved deadline has: a todo's fields plus the due date. */
+    private static final int FIELD_COUNT_DEADLINE = 4;
+
+    /** How many fields a saved event has: a todo's fields plus both dates. */
+    private static final int FIELD_COUNT_EVENT = 5;
 
     private final Path filePath;
 
@@ -160,14 +185,14 @@ public class Storage {
      *     input.
      */
     private String formatTask(Task task) {
-        String status = task.isDone() ? "1" : "0";
+        String status = task.isDone() ? STATUS_DONE : STATUS_NOT_DONE;
         if (task instanceof Todo) {
-            return "T" + SEPARATOR + status + SEPARATOR + task.getDescription();
+            return TYPE_TODO + SEPARATOR + status + SEPARATOR + task.getDescription();
         } else if (task instanceof Deadline deadline) {
-            return "D" + SEPARATOR + status + SEPARATOR + task.getDescription()
+            return TYPE_DEADLINE + SEPARATOR + status + SEPARATOR + task.getDescription()
                     + SEPARATOR + deadline.getBy();
         } else if (task instanceof Event event) {
-            return "E" + SEPARATOR + status + SEPARATOR + task.getDescription()
+            return TYPE_EVENT + SEPARATOR + status + SEPARATOR + task.getDescription()
                     + SEPARATOR + event.getFrom() + SEPARATOR + event.getTo();
         }
         // Reaching here means a new Task subclass was added without teaching
@@ -184,11 +209,13 @@ public class Storage {
      * @throws ZhangWeiException if the line is not in the expected format.
      */
     private Task parseTask(String line) throws ZhangWeiException {
-        // The -1 limit keeps trailing empty fields, so "T | 0 | " is seen as a
-        // blank description rather than a two-field line.
-        String[] fields = line.split(" \\| ", -1);
-        if (fields.length < 3) {
-            throw new ZhangWeiException("expected at least 3 fields");
+        // Pattern.quote keeps the separator a literal, so it stays in step with
+        // the SEPARATOR the writer uses. The -1 limit keeps trailing empty
+        // fields, so "T | 0 | " is seen as a blank description rather than a
+        // two-field line.
+        String[] fields = line.split(Pattern.quote(SEPARATOR), -1);
+        if (fields.length < FIELD_COUNT_TODO) {
+            throw new ZhangWeiException("expected at least " + FIELD_COUNT_TODO + " fields");
         }
 
         String type = fields[0];
@@ -196,16 +223,16 @@ public class Storage {
         String description = requireText(fields[2], "description");
 
         Task task = switch (type) {
-        case "T" -> {
-            requireFieldCount(fields, 3);
+        case TYPE_TODO -> {
+            requireFieldCount(fields, FIELD_COUNT_TODO);
             yield new Todo(description);
         }
-        case "D" -> {
-            requireFieldCount(fields, 4);
+        case TYPE_DEADLINE -> {
+            requireFieldCount(fields, FIELD_COUNT_DEADLINE);
             yield new Deadline(description, parseDate(fields[3], "by"));
         }
-        case "E" -> {
-            requireFieldCount(fields, 5);
+        case TYPE_EVENT -> {
+            requireFieldCount(fields, FIELD_COUNT_EVENT);
             yield new Event(description,
                     parseDate(fields[3], "from"),
                     parseDate(fields[4], "to"));
@@ -240,16 +267,18 @@ public class Storage {
     /**
      * Returns the done status a saved line records.
      *
-     * @param field the status field, expected to be "1" or "0".
+     * @param field the status field, expected to be {@code "1"} or
+     *     {@code "0"}.
      * @return true if the task was saved as done, false otherwise.
      * @throws ZhangWeiException if the field is neither "1" nor "0". Defaulting
      *     to "not done" instead would silently discard the user's progress.
      */
     private boolean parseStatus(String field) throws ZhangWeiException {
         return switch (field) {
-        case "1" -> true;
-        case "0" -> false;
-        default -> throw new ZhangWeiException("status must be 1 or 0, found \""
+        case STATUS_DONE -> true;
+        case STATUS_NOT_DONE -> false;
+        default -> throw new ZhangWeiException("status must be "
+                + STATUS_DONE + " or " + STATUS_NOT_DONE + ", found \""
                 + field + "\"");
         };
     }

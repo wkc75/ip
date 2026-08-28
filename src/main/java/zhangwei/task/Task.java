@@ -7,10 +7,10 @@ package zhangwei.task;
 public class Task {
 
     /** What the user wants to be reminded of, e.g. "read book". */
-    protected String description;
+    private final String description;
 
     /** Whether the user has marked this task as done. */
-    protected boolean isDone;
+    private boolean isDone;
 
     /**
      * Creates a task with the given description.
