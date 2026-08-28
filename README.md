@@ -24,3 +24,23 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Building and running the JAR
+
+Prerequisites: JDK 25 on your machine (`sdk use java 25.0.3.fx-zulu` if you use SDKMAN).
+
+Build the fat JAR -- one archive containing the compiled classes *and* every
+runtime dependency, so it needs nothing else to run:
+
+```
+./gradlew shadowJar
+```
+
+The result is written to `build/libs/zhangwei.jar`. Run it from the project root
+(the chatbot saves tasks to `./data/zhangwei.txt`, relative to where you run it):
+
+```
+java -jar build/libs/zhangwei.jar
+```
+
+To build and run in one step during development, use `./gradlew run` instead.

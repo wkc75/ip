@@ -5,8 +5,12 @@ plugins {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_25
-    targetCompatibility = JavaVersion.VERSION_25
+    // A toolchain pins the exact JDK used to compile, test and package this
+    // project, so `./gradlew shadowJar` produces the same fat JAR regardless of
+    // which JDK happens to be on PATH. Gradle auto-detects SDKMAN-installed JDKs.
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
 }
 
 repositories {
@@ -48,7 +52,14 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    // The fat ("uber") JAR: our compiled classes plus every runtime dependency,
+    // unpacked and repackaged into one self-contained, double-clickable archive.
+    // Fixing the file name keeps it stable across version bumps, so scripts and
+    // instructions can always refer to build/libs/zhangwei.jar.
+    archiveFileName = 'zhangwei.jar'
+
+    // The Main-Class manifest entry is taken from application.mainClass above,
+    // which is what lets `java -jar` know where to start.
 }
 
 run {
