@@ -24,12 +24,21 @@ public class TaskList {
         this.tasks = new ArrayList<>();
     }
 
-    /** Creates a task list holding the given tasks, e.g. the ones just loaded. */
+    /**
+     * Creates a task list holding the given tasks, e.g. the ones just loaded.
+     *
+     * @param tasks the tasks to start with. They are copied, so later changes
+     *     to the given list do not reach this one.
+     */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
     }
 
-    /** Adds the given task to the end of the list. */
+    /**
+     * Adds the given task to the end of the list.
+     *
+     * @param task the task to add.
+     */
     public void add(Task task) {
         tasks.add(task);
     }
@@ -37,6 +46,9 @@ public class TaskList {
     /**
      * Removes and returns the task with the given 1-based number.
      * The number must already have been checked by {@link #requireTask}.
+     *
+     * @param taskNumber the 1-based number of the task to remove.
+     * @return the task that was removed, so the caller can show it.
      */
     public Task delete(int taskNumber) {
         return tasks.remove(taskNumber - 1);
@@ -45,17 +57,28 @@ public class TaskList {
     /**
      * Returns the task with the given 1-based number.
      * The number must already have been checked by {@link #requireTask}.
+     *
+     * @param taskNumber the 1-based number of the task wanted.
+     * @return the task with that number.
      */
     public Task get(int taskNumber) {
         return tasks.get(taskNumber - 1);
     }
 
-    /** Returns how many tasks are in the list. */
+    /**
+     * Returns how many tasks are in the list.
+     *
+     * @return the number of tasks held.
+     */
     public int size() {
         return tasks.size();
     }
 
-    /** Returns whether the list holds no tasks. */
+    /**
+     * Returns whether the list holds no tasks.
+     *
+     * @return true if there are no tasks, false otherwise.
+     */
     public boolean isEmpty() {
         return tasks.isEmpty();
     }
@@ -63,6 +86,8 @@ public class TaskList {
     /**
      * Returns the tasks in order, for reading only. Callers cannot change the
      * list through it, so every change still goes through this class.
+     *
+     * @return an unmodifiable view of the tasks, in the order they were added.
      */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
@@ -71,6 +96,7 @@ public class TaskList {
     /**
      * Checks that the given 1-based number refers to a task in this list.
      *
+     * @param taskNumber the 1-based number the user typed.
      * @throws ZhangWeiException if the list is empty or the number is out of
      *     range, explaining which numbers would have worked.
      */

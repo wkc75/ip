@@ -32,6 +32,10 @@ public class Ui {
 
     private final Scanner scanner = new Scanner(System.in);
 
+    /** Creates a Ui that reads from and writes to the console. */
+    public Ui() {
+    }
+
     /** Prints the banner and the greeting shown when the chatbot starts. */
     public void showWelcome() {
         System.out.println(BANNER);
@@ -39,7 +43,11 @@ public class Ui {
         System.out.println("What can I do for you?");
     }
 
-    /** Returns the next line the user types, without the line separator. */
+    /**
+     * Reads one line of input from the console.
+     *
+     * @return the next line the user types, without the line separator.
+     */
     public String readCommand() {
         return scanner.nextLine();
     }
@@ -52,6 +60,8 @@ public class Ui {
     /**
      * Prints a message the chatbot wants the user to read, such as a
      * complaint about the save file.
+     *
+     * @param message the text to show.
      */
     public void showMessage(String message) {
         System.out.println(message);
@@ -62,38 +72,62 @@ public class Ui {
      *
      * <p>Separate from {@link #showMessage} so that errors can later be
      * highlighted (a prefix, a colour, a different stream) in one place.
+     *
+     * @param message the explanation of what went wrong.
      */
     public void showError(String message) {
         System.out.println(message);
     }
 
-    /** Confirms that a task was added, and reports the new task count. */
+    /**
+     * Confirms that a task was added, and reports the new task count.
+     *
+     * @param task the task that was just added.
+     * @param taskCount how many tasks the list holds now.
+     */
     public void showTaskAdded(Task task, int taskCount) {
         System.out.println("Got it. I've added this task:");
         showTask(task);
         showTaskCount(taskCount);
     }
 
-    /** Confirms that a task was removed, and reports the new task count. */
+    /**
+     * Confirms that a task was removed, and reports the new task count.
+     *
+     * @param task the task that was just removed.
+     * @param taskCount how many tasks the list holds now.
+     */
     public void showTaskRemoved(Task task, int taskCount) {
         System.out.println("Noted. I've removed this task:");
         showTask(task);
         showTaskCount(taskCount);
     }
 
-    /** Confirms that a task was marked as done. */
+    /**
+     * Confirms that a task was marked as done.
+     *
+     * @param task the task that was just marked.
+     */
     public void showTaskMarked(Task task) {
         System.out.println("Nice! I've marked this task as done:");
         showTask(task);
     }
 
-    /** Confirms that a task was marked as not done. */
+    /**
+     * Confirms that a task was marked as not done.
+     *
+     * @param task the task that was just unmarked.
+     */
     public void showTaskUnmarked(Task task) {
         System.out.println("OK, I've marked this task as not done yet:");
         showTask(task);
     }
 
-    /** Prints every stored task, numbered from 1, with its done status. */
+    /**
+     * Prints every stored task, numbered from 1, with its done status.
+     *
+     * @param tasks the task list to show.
+     */
     public void showTaskList(TaskList tasks) {
         System.out.println("Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
@@ -101,12 +135,20 @@ public class Ui {
         }
     }
 
-    /** Prints the given task, indented, as it appears to the user. */
+    /**
+     * Prints the given task, indented, as it appears to the user.
+     *
+     * @param task the task to show.
+     */
     private void showTask(Task task) {
         System.out.println("  " + task);
     }
 
-    /** Reports how many tasks are stored, after adding or removing one. */
+    /**
+     * Reports how many tasks are stored, after adding or removing one.
+     *
+     * @param taskCount how many tasks the list holds now.
+     */
     private void showTaskCount(int taskCount) {
         System.out.println("Now you have " + taskCount + " tasks in the list.");
     }

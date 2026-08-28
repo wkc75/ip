@@ -10,7 +10,12 @@ package zhangwei;
  */
 public class ZhangWeiException extends Exception {
 
-    /** Creates an exception carrying a message written for the user to read. */
+    /**
+     * Creates an exception carrying a message written for the user to read.
+     *
+     * @param message the explanation shown to the user, phrased so that it
+     *     says what went wrong and what would have worked instead.
+     */
     public ZhangWeiException(String message) {
         super(message);
     }

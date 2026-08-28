@@ -30,10 +30,15 @@ import zhangwei.task.Todo;
  */
 public class Parser {
 
+    /** Prevents instantiation: this class is only a home for static methods. */
+    private Parser() {
+    }
+
     /**
      * Returns the command the given line asks for.
      *
      * @param fullCommand one line exactly as the user typed it.
+     * @return the command that line asks for, ready to be executed.
      * @throws ZhangWeiException if the line does not describe a usable command.
      */
     public static Command parse(String fullCommand) throws ZhangWeiException {
@@ -60,6 +65,8 @@ public class Parser {
      *
      * @param arguments the text typed after the command word, e.g. "2".
      * @param type the command asking, used to phrase the example.
+     * @return the task number as an integer. It may still be out of range;
+     *     only the task list can tell.
      * @throws ZhangWeiException if it is missing or is not a number.
      */
     private static int parseTaskNumber(String arguments, CommandType type)
@@ -80,6 +87,8 @@ public class Parser {
     /**
      * Returns a todo built from the text typed after "todo".
      *
+     * @param arguments the text typed after "todo", e.g. "read book".
+     * @return the todo described by that text.
      * @throws ZhangWeiException if no description was given.
      */
     private static Todo parseTodo(String arguments) throws ZhangWeiException {
@@ -95,6 +104,8 @@ public class Parser {
      * Returns a deadline built from text of the form
      * "description /by yyyy-MM-dd".
      *
+     * @param arguments the text typed after "deadline".
+     * @return the deadline described by that text.
      * @throws ZhangWeiException if the description or /by date is invalid.
      */
     private static Deadline parseDeadline(String arguments) throws ZhangWeiException {
@@ -112,6 +123,8 @@ public class Parser {
      * Returns an event built from text of the form
      * "description /from yyyy-MM-dd /to yyyy-MM-dd".
      *
+     * @param arguments the text typed after "event".
+     * @return the event described by that text.
      * @throws ZhangWeiException if the description or either date is invalid.
      */
     private static Event parseEvent(String arguments) throws ZhangWeiException {
@@ -131,6 +144,10 @@ public class Parser {
     /**
      * Parses a date written in the ISO {@code yyyy-MM-dd} format.
      *
+     * @param text the date as the user typed it, e.g. "2019-12-02".
+     * @param marker the marker the date followed, e.g. "/by", used to say
+     *     which date the complaint is about.
+     * @return the date that text names.
      * @throws ZhangWeiException if the date is missing, malformed, or impossible.
      */
     private static LocalDate parseDate(String text, String marker)
@@ -148,6 +165,7 @@ public class Parser {
      * file. Allowing it would split one task across several fields, so the task
      * would come back wrong (or not at all) the next time the chatbot starts.
      *
+     * @param text the text the user typed for a task.
      * @throws ZhangWeiException if the text contains "|".
      */
     private static void rejectSeparator(String text) throws ZhangWeiException {

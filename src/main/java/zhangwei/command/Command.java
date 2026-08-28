@@ -15,6 +15,10 @@ import zhangwei.ui.Ui;
  */
 public abstract class Command {
 
+    /** Creates a command. Only subclasses can be created, since this class is abstract. */
+    protected Command() {
+    }
+
     /**
      * Carries out this command.
      *
@@ -30,6 +34,8 @@ public abstract class Command {
     /**
      * Returns whether the chatbot should stop after this command.
      * Only the exit command overrides this.
+     *
+     * @return true if the chatbot should end the session, false otherwise.
      */
     public boolean isExit() {
         return false;

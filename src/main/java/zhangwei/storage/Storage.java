@@ -33,7 +33,12 @@ public class Storage {
 
     private final Path filePath;
 
-    /** Creates storage that reads and writes the given path. */
+    /**
+     * Creates storage that reads and writes the given path.
+     *
+     * @param filePath path of the save file, e.g. "./data/zhangwei.txt". The
+     *     file and its folder do not have to exist yet.
+     */
     public Storage(String filePath) {
         this.filePath = Path.of(filePath);
     }
@@ -45,6 +50,11 @@ public class Storage {
      *
      * <p>A record is used because this is a plain group of values with no
      * behaviour; it gives the constructor, accessors and equals for free.
+     *
+     * @param tasks the tasks that were read successfully, in file order.
+     * @param skippedLines how many lines could not be understood.
+     * @param backupPath where the damaged file was copied to, or null if
+     *     nothing was damaged or the copy failed.
      */
     public record LoadResult(List<Task> tasks, int skippedLines, Path backupPath) {
     }
@@ -58,6 +68,8 @@ public class Storage {
      * the user every other task. Because the next save would overwrite those
      * skipped lines, a copy of the original file is kept first.
      *
+     * @return the tasks recovered, along with how much was skipped and where
+     *     the damaged file was backed up.
      * @throws ZhangWeiException if the file exists but cannot be read at all.
      */
     public LoadResult loadTasks() throws ZhangWeiException {
@@ -96,7 +108,9 @@ public class Storage {
      * Replaces the save file with one line for each task in the current list,
      * creating the containing folder first if it does not exist yet.
      *
-     * @throws ZhangWeiException if the tasks could not be written.
+     * @param tasks the task list to write out.
+     * @throws ZhangWeiException if the tasks could not be written, warning the
+     *     user that the changes will be lost.
      */
     public void saveTasks(TaskList tasks) throws ZhangWeiException {
         try {
@@ -121,8 +135,10 @@ public class Storage {
 
     /**
      * Copies the save file alongside itself before damaged lines are lost to
-     * the next save. Returns the copy's path, or null if the copy failed --
-     * a failed backup is not worth stopping the chatbot for.
+     * the next save.
+     *
+     * @return the path of the copy, or null if the copy failed -- a failed
+     *     backup is not worth stopping the chatbot for.
      */
     private Path backUpDamagedFile() {
         Path backupPath = filePath.resolveSibling(filePath.getFileName() + BACKUP_SUFFIX);
@@ -134,7 +150,15 @@ public class Storage {
         }
     }
 
-    /** Converts one task into the text format used in the save file. */
+    /**
+     * Converts one task into the text format used in the save file.
+     *
+     * @param task the task to write out.
+     * @return one line of the save file, e.g. "D | 0 | return book | 2019-06-06".
+     * @throws IllegalStateException if the task is of a type this method was
+     *     never taught to save, which is a programming error rather than bad
+     *     input.
+     */
     private String formatTask(Task task) {
         String status = task.isDone() ? "1" : "0";
         if (task instanceof Todo) {
@@ -155,6 +179,8 @@ public class Storage {
     /**
      * Recreates one task from a line in the save file.
      *
+     * @param line one line of the save file.
+     * @return the task that line describes, already marked done if it was.
      * @throws ZhangWeiException if the line is not in the expected format.
      */
     private Task parseTask(String line) throws ZhangWeiException {
@@ -196,6 +222,9 @@ public class Storage {
     /**
      * Parses a saved date written in the ISO {@code yyyy-MM-dd} format.
      *
+     * @param field the field as it appears in the save file.
+     * @param fieldName the field's name, e.g. "by", used in the complaint.
+     * @return the date that field names.
      * @throws ZhangWeiException if the field is blank, malformed, or impossible.
      */
     private LocalDate parseDate(String field, String fieldName)
@@ -211,6 +240,8 @@ public class Storage {
     /**
      * Returns the done status a saved line records.
      *
+     * @param field the status field, expected to be "1" or "0".
+     * @return true if the task was saved as done, false otherwise.
      * @throws ZhangWeiException if the field is neither "1" nor "0". Defaulting
      *     to "not done" instead would silently discard the user's progress.
      */
@@ -226,6 +257,9 @@ public class Storage {
     /**
      * Returns the given field unchanged.
      *
+     * @param field the field read from the save file.
+     * @param fieldName the field's name, e.g. "description", used in the complaint.
+     * @return the field exactly as it was read.
      * @throws ZhangWeiException if it is blank, which would produce a task the
      *     user cannot make sense of.
      */
@@ -239,6 +273,8 @@ public class Storage {
     /**
      * Checks that a line has exactly the number of fields its type needs.
      *
+     * @param fields the fields the line was split into.
+     * @param expected how many fields this task type must have.
      * @throws ZhangWeiException if it has too few or too many. Too many usually
      *     means the user typed the separator inside a description.
      */
