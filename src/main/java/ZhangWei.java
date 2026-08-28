@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -126,35 +128,54 @@ public class ZhangWei {
 
     /**
      * Returns a deadline built from text of the form
-     * "description /by date". 
+     * "description /by yyyy-MM-dd".
      *
-     * @throws ZhangWeiException if the description or the /by part is missing.
+     * @throws ZhangWeiException if the description or /by date is invalid.
      */
     private static Deadline parseDeadline(String arguments) throws ZhangWeiException {
         String[] parts = arguments.split("/by", 2);
         if (parts.length < 2 || parts[0].trim().isEmpty() || parts[1].trim().isEmpty()) {
             throw new ZhangWeiException("A deadline needs a description and a /by. "
-                    + "For example: deadline return book /by Sunday");
+                    + "For example: deadline return book /by 2019-12-02");
         }
         rejectSeparator(arguments);
-        return new Deadline(parts[0].trim(), parts[1].trim());
+        LocalDate by = parseDate(parts[1].trim(), "/by");
+        return new Deadline(parts[0].trim(), by);
     }
 
     /**
      * Returns an event built from text of the form
-     * "description /from start /to end".
+     * "description /from yyyy-MM-dd /to yyyy-MM-dd".
      *
-     * @throws ZhangWeiException if the description, the /from or the /to is missing.
+     * @throws ZhangWeiException if the description or either date is invalid.
      */
     private static Event parseEvent(String arguments) throws ZhangWeiException {
         String[] parts = arguments.split("/from|/to");
         if (parts.length < 3 || parts[0].trim().isEmpty()
                 || parts[1].trim().isEmpty() || parts[2].trim().isEmpty()) {
             throw new ZhangWeiException("An event needs a description, a /from and a /to. "
-                    + "For example: event project meeting /from Mon 2pm /to 4pm");
+                    + "For example: event project meeting /from 2019-12-03 "
+                    + "/to 2019-12-04");
         }
         rejectSeparator(arguments);
-        return new Event(parts[0].trim(), parts[1].trim(), parts[2].trim());
+        LocalDate from = parseDate(parts[1].trim(), "/from");
+        LocalDate to = parseDate(parts[2].trim(), "/to");
+        return new Event(parts[0].trim(), from, to);
+    }
+
+    /**
+     * Parses a date written in the ISO {@code yyyy-MM-dd} format.
+     *
+     * @throws ZhangWeiException if the date is missing, malformed, or impossible.
+     */
+    private static LocalDate parseDate(String text, String marker)
+            throws ZhangWeiException {
+        try {
+            return LocalDate.parse(text);
+        } catch (DateTimeParseException e) {
+            throw new ZhangWeiException("The " + marker
+                    + " date must use yyyy-MM-dd, for example 2019-12-02.");
+        }
     }
 
     /**

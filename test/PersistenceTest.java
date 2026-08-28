@@ -10,6 +10,8 @@ public class PersistenceTest {
 
     /** Runs every persistence scenario and reports success if all assertions pass. */
     public static void main(String[] args) throws Exception {
+        acceptsIsoDatesAndDisplaysReadableDates();
+        rejectsInvalidUserDatesWithoutEndingTheSession();
         loadsTasksWhenTheChatbotStarts();
         startsEmptyWhenNoSaveFileExists();
         ignoresBlankLinesInTheSaveFile();
@@ -22,6 +24,68 @@ public class PersistenceTest {
         System.out.println("All persistence tests passed.");
     }
 
+    /**
+     * Verifies that ISO dates are understood, displayed readably, and saved
+     * without losing their machine-readable representation.
+     */
+    private static void acceptsIsoDatesAndDisplaysReadableDates() throws Exception {
+        Path workingDirectory = Files.createTempDirectory("zhangwei-date-test-");
+        try {
+            String output = runChatbot(workingDirectory,
+                    "deadline return book /by 2019-12-02\n"
+                            + "event project meeting /from 2019-12-03 /to 2019-12-04\n"
+                            + "list\nbye\n");
+
+            String expectedList = "Here are the tasks in your list:\n"
+                    + "1.[D][ ] return book (by: Dec 2 2019)\n"
+                    + "2.[E][ ] project meeting (from: Dec 3 2019 to: Dec 4 2019)\n";
+            if (!output.contains(expectedList)) {
+                throw new AssertionError("Expected formatted task dates:\n"
+                        + expectedList + "\nActual chatbot output:\n" + output);
+            }
+
+            List<String> savedLines = Files.readAllLines(
+                    workingDirectory.resolve("data/zhangwei.txt"));
+            List<String> expectedLines = List.of(
+                    "D | 0 | return book | 2019-12-02",
+                    "E | 0 | project meeting | 2019-12-03 | 2019-12-04");
+            if (!savedLines.equals(expectedLines)) {
+                throw new AssertionError("Expected " + expectedLines
+                        + " but found " + savedLines);
+            }
+        } finally {
+            deleteRecursively(workingDirectory);
+        }
+    }
+
+    /** Verifies that malformed or impossible dates are reported without a crash. */
+    private static void rejectsInvalidUserDatesWithoutEndingTheSession() throws Exception {
+        Path workingDirectory = Files.createTempDirectory("zhangwei-invalid-date-test-");
+        try {
+            String output = runChatbot(workingDirectory,
+                    "deadline return book /by Sunday\n"
+                            + "event meeting /from Monday /to 2019-12-04\n"
+                            + "event meeting /from 2019-12-03 /to 2019-02-30\n"
+                            + "list\nbye\n");
+
+            String expected = "The /by date must use yyyy-MM-dd, "
+                    + "for example 2019-12-02.\n"
+                    + "The /from date must use yyyy-MM-dd, "
+                    + "for example 2019-12-02.\n"
+                    + "The /to date must use yyyy-MM-dd, "
+                    + "for example 2019-12-02.\n"
+                    + "Here are the tasks in your list:\n"
+                    + "Bye. Hope to see you again soon!\n";
+            if (!output.contains(expected)) {
+                throw new AssertionError("Expected invalid dates to be reported and "
+                        + "the session to continue:\n" + expected
+                        + "\nActual chatbot output:\n" + output);
+            }
+        } finally {
+            deleteRecursively(workingDirectory);
+        }
+    }
+
     /** Verifies that a fresh chatbot process restores every saved task. */
     private static void loadsTasksWhenTheChatbotStarts() throws Exception {
         Path workingDirectory = Files.createTempDirectory("zhangwei-loading-test-");
@@ -30,14 +94,14 @@ public class PersistenceTest {
             Files.createDirectories(savedFile.getParent());
             Files.write(savedFile, List.of(
                     "T | 1 | read book",
-                    "D | 0 | return book | June 6th",
-                    "E | 1 | project meeting | Aug 6th 2pm | 4pm"));
+                    "D | 0 | return book | 2019-06-06",
+                    "E | 1 | project meeting | 2019-08-06 | 2019-08-07"));
 
             String output = runChatbot(workingDirectory, "list\nbye\n");
             String expectedList = "Here are the tasks in your list:\n"
                     + "1.[T][X] read book\n"
-                    + "2.[D][ ] return book (by: June 6th)\n"
-                    + "3.[E][X] project meeting (from: Aug 6th 2pm to: 4pm)\n";
+                    + "2.[D][ ] return book (by: Jun 6 2019)\n"
+                    + "3.[E][X] project meeting (from: Aug 6 2019 to: Aug 7 2019)\n";
             if (!output.contains(expectedList)) {
                 throw new AssertionError("Expected restored task list:\n"
                         + expectedList + "\nActual chatbot output:\n" + output);
@@ -51,13 +115,13 @@ public class PersistenceTest {
     private static void savesAfterAddingTasks() throws Exception {
         assertSavedLines(
                 "todo read book\n"
-                        + "deadline return book /by June 6th\n"
-                        + "event project meeting /from Aug 6th 2pm /to 4pm\n"
+                        + "deadline return book /by 2019-06-06\n"
+                        + "event project meeting /from 2019-08-06 /to 2019-08-07\n"
                         + "bye\n",
                 List.of(
                         "T | 0 | read book",
-                        "D | 0 | return book | June 6th",
-                        "E | 0 | project meeting | Aug 6th 2pm | 4pm"));
+                        "D | 0 | return book | 2019-06-06",
+                        "E | 0 | project meeting | 2019-08-06 | 2019-08-07"));
     }
 
     /** Verifies that changing a task to done updates the saved status. */
@@ -177,18 +241,19 @@ public class PersistenceTest {
                     "D | 0 | missing its by field",
                     "X | 0 | unknown task type",
                     "T | 7 | status is not 1 or 0",
-                    "E | 0 | project meeting | Mon 2pm | 4pm"));
+                    "D | 0 | impossible date | 2019-02-30",
+                    "E | 0 | project meeting | 2019-08-06 | 2019-08-07"));
 
             String output = runChatbot(workingDirectory, "list\nbye\n");
 
-            if (!output.contains("I could not understand 3 line(s)")) {
-                throw new AssertionError("Expected 3 damaged lines to be "
+            if (!output.contains("I could not understand 4 line(s)")) {
+                throw new AssertionError("Expected 4 damaged lines to be "
                         + "reported, got:\n" + output);
             }
 
             String expectedList = "Here are the tasks in your list:\n"
                     + "1.[T][X] read book\n"
-                    + "2.[E][ ] project meeting (from: Mon 2pm to: 4pm)\n";
+                    + "2.[E][ ] project meeting (from: Aug 6 2019 to: Aug 7 2019)\n";
             if (!output.contains(expectedList)) {
                 throw new AssertionError("Expected the two readable tasks:\n"
                         + expectedList + "\nActual chatbot output:\n" + output);
@@ -199,8 +264,8 @@ public class PersistenceTest {
                 throw new AssertionError("Expected a backup of the damaged file at "
                         + backupFile);
             }
-            if (Files.readAllLines(backupFile).size() != 5) {
-                throw new AssertionError("The backup should hold all 5 original lines");
+            if (Files.readAllLines(backupFile).size() != 6) {
+                throw new AssertionError("The backup should hold all 6 original lines");
             }
         } finally {
             deleteRecursively(workingDirectory);
