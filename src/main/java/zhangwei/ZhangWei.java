@@ -13,6 +13,11 @@ import zhangwei.ui.Ui;
  * loop: the {@link Ui} talks to the user, the {@link Parser} makes sense of
  * what was typed, each {@link Command} carries one instruction out, the
  * {@link TaskList} holds the tasks and the {@link Storage} keeps them on disk.
+ *
+ * <p>It offers two ways in. {@link #run()} drives the console version, reading
+ * one line at a time until the user says bye. {@link #getResponse(String)}
+ * answers one line and returns what would have been printed, which is what the
+ * graphical version calls each time the user presses Send.
  */
 public class ZhangWei {
 
@@ -26,6 +31,9 @@ public class ZhangWei {
      * and the message belongs after it, where the user is looking.
      */
     private final String loadMessage;
+
+    /** Whether a command has asked for the session to end. */
+    private boolean isExitRequested = false;
 
     /**
      * Creates a chatbot that keeps its tasks in the given file.
@@ -70,8 +78,11 @@ public class ZhangWei {
             ui.showMessage(loadMessage);
         }
 
-        boolean isExit = false;
-        while (!isExit) {
+        while (!isExitRequested) {
+            // The console has already shown everything said so far, so the
+            // buffered copy kept for the graphical version is thrown away.
+            ui.drainOutput();
+
             // Anything the chatbot can explain to the user arrives here as a
             // ZhangWeiException, so one handler reports them all.
             try {
@@ -82,7 +93,7 @@ public class ZhangWei {
                 }
                 Command command = Parser.parse(fullCommand);
                 command.execute(tasks, ui, storage);
-                isExit = command.isExit();
+                isExitRequested = command.isExit();
             } catch (ZhangWeiException e) {
                 ui.showError(e.getMessage());
             }
@@ -91,7 +102,62 @@ public class ZhangWei {
     }
 
     /**
-     * Starts the chatbot with its default save file.
+     * Returns the greeting the graphical version shows before the user has
+     * typed anything, together with any complaint about the save file.
+     *
+     * @return the text of the opening message.
+     */
+    public String getWelcomeMessage() {
+        ui.showGreeting();
+        if (loadMessage != null) {
+            ui.showMessage(loadMessage);
+        }
+        return ui.drainOutput();
+    }
+
+    /**
+     * Carries out one line of input and returns the chatbot's reply.
+     *
+     * <p>This is the console loop's body without the loop: the same parser,
+     * the same commands and the same wording, gathered into a string instead
+     * of left on the screen.
+     *
+     * @param input one line exactly as the user typed it.
+     * @return what the chatbot has to say about it, or an empty string if the
+     *     line was blank and so asked for nothing.
+     */
+    public String getResponse(String input) {
+        assert input != null : "The graphical front end should never send a null line.";
+
+        if (input.isBlank()) {
+            return "";
+        }
+
+        try {
+            Command command = Parser.parse(input);
+            command.execute(tasks, ui, storage);
+            isExitRequested = command.isExit();
+        } catch (ZhangWeiException e) {
+            ui.showError(e.getMessage());
+        }
+        return ui.drainOutput();
+    }
+
+    /**
+     * Returns whether the last command asked for the session to end, so that
+     * the graphical version knows when to close its window.
+     *
+     * @return true once the user has said bye, false until then.
+     */
+    public boolean isExitRequested() {
+        return isExitRequested;
+    }
+
+    /**
+     * Starts the console version of the chatbot with its default save file.
+     *
+     * <p>The graphical version starts from
+     * {@link zhangwei.gui.Launcher} instead.
      *
      * @param args command line arguments, which this chatbot does not use.
      */

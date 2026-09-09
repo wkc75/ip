@@ -14,6 +14,11 @@ import zhangwei.task.TaskList;
  * calls {@code System.out} directly, so the wording of a message can be
  * changed, or the whole console replaced with a window, without touching the
  * classes that decide what to say.
+ *
+ * <p>Every line is written twice: once to the console, and once to an internal
+ * buffer that {@link #drainOutput()} hands over. The console version of the
+ * chatbot ignores the buffer, while the graphical version reads it instead of
+ * the console, so both front ends get the same words from the same code.
  */
 public class Ui {
 
@@ -33,15 +38,28 @@ public class Ui {
 
     private final Scanner scanner = new Scanner(System.in);
 
+    /** Holds a copy of everything said since the last {@link #drainOutput()}. */
+    private final StringBuilder buffer = new StringBuilder();
+
     /** Creates a Ui that reads from and writes to the console. */
     public Ui() {
     }
 
     /** Prints the banner and the greeting shown when the chatbot starts. */
     public void showWelcome() {
-        System.out.println(BANNER);
-        System.out.println("Hello! I'm ZhangWei.");
-        System.out.println("What can I do for you?");
+        say(BANNER);
+        showGreeting();
+    }
+
+    /**
+     * Prints the greeting alone, without the banner.
+     *
+     * <p>The banner is drawn with spaces and slashes, so it only lines up in a
+     * fixed-width console; a window shows this shorter greeting instead.
+     */
+    public void showGreeting() {
+        say("Hello! I'm ZhangWei.");
+        say("What can I do for you?");
     }
 
     /**
@@ -55,7 +73,7 @@ public class Ui {
 
     /** Prints the farewell shown just before the chatbot exits. */
     public void showGoodbye() {
-        System.out.println("Bye. Hope to see you again soon!");
+        say("Bye. Hope to see you again soon!");
     }
 
     /**
@@ -65,7 +83,7 @@ public class Ui {
      * @param message the text to show.
      */
     public void showMessage(String message) {
-        System.out.println(message);
+        say(message);
     }
 
     /**
@@ -77,7 +95,7 @@ public class Ui {
      * @param message the explanation of what went wrong.
      */
     public void showError(String message) {
-        System.out.println(message);
+        say(message);
     }
 
     /**
@@ -87,7 +105,7 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println("Got it. I've added this task:");
+        say("Got it. I've added this task:");
         showTask(task);
         showTaskCount(taskCount);
     }
@@ -99,7 +117,7 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskRemoved(Task task, int taskCount) {
-        System.out.println("Noted. I've removed this task:");
+        say("Noted. I've removed this task:");
         showTask(task);
         showTaskCount(taskCount);
     }
@@ -110,7 +128,7 @@ public class Ui {
      * @param task the task that was just marked.
      */
     public void showTaskMarked(Task task) {
-        System.out.println("Nice! I've marked this task as done:");
+        say("Nice! I've marked this task as done:");
         showTask(task);
     }
 
@@ -120,7 +138,7 @@ public class Ui {
      * @param task the task that was just unmarked.
      */
     public void showTaskUnmarked(Task task) {
-        System.out.println("OK, I've marked this task as not done yet:");
+        say("OK, I've marked this task as not done yet:");
         showTask(task);
     }
 
@@ -130,9 +148,9 @@ public class Ui {
      * @param tasks the task list to show.
      */
     public void showTaskList(TaskList tasks) {
-        System.out.println("Here are the tasks in your list:");
+        say("Here are the tasks in your list:");
         for (int i = 1; i <= tasks.size(); i++) {
-            System.out.println(i + "." + tasks.get(i));
+            say(i + "." + tasks.get(i));
         }
     }
 
@@ -147,14 +165,29 @@ public class Ui {
      */
     public void showMatchingTasks(List<Task> matches) {
         if (matches.isEmpty()) {
-            System.out.println("There are no matching tasks in your list.");
+            say("There are no matching tasks in your list.");
             return;
         }
 
-        System.out.println("Here are the matching tasks in your list:");
+        say("Here are the matching tasks in your list:");
         for (int i = 0; i < matches.size(); i++) {
-            System.out.println((i + 1) + "." + matches.get(i));
+            say((i + 1) + "." + matches.get(i));
         }
+    }
+
+    /**
+     * Returns everything said since this method was last called, and forgets
+     * it, so that the next caller only sees the reply to the next command.
+     *
+     * <p>The console front end has already printed this text and throws the
+     * copy away; the graphical front end shows the copy in a dialog bubble.
+     *
+     * @return the buffered text, with the trailing line separator removed.
+     */
+    public String drainOutput() {
+        String output = buffer.toString().strip();
+        buffer.setLength(0);
+        return output;
     }
 
     /**
@@ -163,7 +196,7 @@ public class Ui {
      * @param task the task to show.
      */
     private void showTask(Task task) {
-        System.out.println("  " + task);
+        say("  " + task);
     }
 
     /**
@@ -172,7 +205,20 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     private void showTaskCount(int taskCount) {
-        System.out.println("Now you have " + taskCount + " tasks in the list.");
+        say("Now you have " + taskCount + " tasks in the list.");
+    }
+
+    /**
+     * Says one line, to the console and to the buffer.
+     *
+     * <p>Every message in this class goes through here, so a front end that
+     * cannot use the console only has to read the buffer.
+     *
+     * @param message the line to say.
+     */
+    private void say(String message) {
+        System.out.println(message);
+        buffer.append(message).append(System.lineSeparator());
     }
 
     /** Releases the console once the chatbot has finished with it. */

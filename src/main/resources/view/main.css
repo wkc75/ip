@@ -1,0 +1,61 @@
+/* Colours and spacing for the chat window. */
+
+.root-pane {
+    -fx-background-color: #f4f5f7;
+}
+
+.chat-scroll {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+    -fx-padding: 0;
+}
+
+.chat-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+
+.chat-area {
+    -fx-background-color: transparent;
+}
+
+/* What the user typed: a filled bubble on the right. */
+.dialog-label {
+    -fx-background-color: #3d6fd8;
+    -fx-text-fill: white;
+    -fx-background-radius: 14 14 2 14;
+    -fx-padding: 9 13 9 13;
+    -fx-font-size: 13px;
+}
+
+/* What the chatbot replied: a pale bubble on the left. */
+.reply-label {
+    -fx-background-color: white;
+    -fx-text-fill: #1f2430;
+    -fx-background-radius: 14 14 14 2;
+    -fx-padding: 9 13 9 13;
+    -fx-font-size: 13px;
+    -fx-border-color: #dfe2e8;
+    -fx-border-radius: 14 14 14 2;
+}
+
+.user-input {
+    -fx-background-radius: 18;
+    -fx-border-radius: 18;
+    -fx-border-color: #cfd4dd;
+    -fx-background-color: white;
+    -fx-padding: 8 14 8 14;
+    -fx-font-size: 13px;
+}
+
+.send-button {
+    -fx-background-radius: 18;
+    -fx-background-color: #3d6fd8;
+    -fx-text-fill: white;
+    -fx-padding: 8 16 8 16;
+    -fx-font-size: 13px;
+    -fx-cursor: hand;
+}
+
+.send-button:hover {
+    -fx-background-color: #35619c;
+}

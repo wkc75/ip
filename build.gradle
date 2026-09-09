@@ -19,6 +19,18 @@ repositories {
 
 dependencies {
     String jUnitVersion = '5.14.4'
+    String javaFxVersion = '21.0.5'
+
+    // JavaFX ships a different native library for each operating system, so
+    // every platform's artefact is listed here. Packing them all in keeps the
+    // fat JAR runnable on Windows, macOS (Intel and Apple silicon) and Linux,
+    // rather than only on the machine that built it.
+    for (String platform : ['win', 'mac', 'mac-aarch64', 'linux']) {
+        implementation "org.openjfx:javafx-base:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-graphics:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-controls:${javaFxVersion}:${platform}"
+        implementation "org.openjfx:javafx-fxml:${javaFxVersion}:${platform}"
+    }
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${jUnitVersion}"
 
@@ -41,7 +53,10 @@ test {
 }
 
 application {
-    mainClass = 'zhangwei.ZhangWei'
+    // The GUI is the way in, and it starts from a plain class rather than from
+    // the Application subclass, so that `java -jar` does not demand JavaFX on
+    // the module path. The console version is still there in zhangwei.ZhangWei.
+    mainClass = 'zhangwei.gui.Launcher'
 }
 
 jar {
