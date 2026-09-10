@@ -19,6 +19,8 @@ public class Task {
      * @param description what the user wants to be reminded of, e.g. "read book".
      */
     public Task(String description) {
+        assert description != null && !description.isBlank()
+                : "A task needs a description; the parser and the save file reader both reject a blank one.";
         this.description = description;
         this.isDone = false;
     }

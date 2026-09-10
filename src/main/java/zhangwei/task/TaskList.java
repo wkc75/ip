@@ -51,6 +51,8 @@ public class TaskList {
      * @return the task that was removed, so the caller can show it.
      */
     public Task delete(int taskNumber) {
+        assert taskNumber >= 1 && taskNumber <= tasks.size()
+                : "Task number " + taskNumber + " is out of range; requireTask should have rejected it.";
         return tasks.remove(taskNumber - 1);
     }
 
@@ -62,6 +64,8 @@ public class TaskList {
      * @return the task with that number.
      */
     public Task get(int taskNumber) {
+        assert taskNumber >= 1 && taskNumber <= tasks.size()
+                : "Task number " + taskNumber + " is out of range; requireTask should have rejected it.";
         return tasks.get(taskNumber - 1);
     }
 
