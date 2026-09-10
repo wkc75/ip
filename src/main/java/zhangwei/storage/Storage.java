@@ -146,10 +146,9 @@ public class Storage {
                 Files.createDirectories(parent);
             }
 
-            List<String> lines = new ArrayList<>();
-            for (Task task : tasks.asList()) {
-                lines.add(formatTask(task));
-            }
+            List<String> lines = tasks.asList().stream()
+                    .map(this::formatTask)
+                    .toList();
             Files.write(filePath, lines);
         } catch (IOException e) {
             throw new ZhangWeiException("I could not save your tasks to "

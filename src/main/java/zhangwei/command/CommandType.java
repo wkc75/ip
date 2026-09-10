@@ -1,5 +1,8 @@
 package zhangwei.command;
 
+import java.util.Arrays;
+import java.util.stream.Collectors;
+
 import zhangwei.ZhangWeiException;
 
 /**
@@ -63,13 +66,11 @@ public enum CommandType {
      *     keywords that would have worked.
      */
     public static CommandType fromKeyword(String keyword) throws ZhangWeiException {
-        for (CommandType command : values()) {
-            if (command.keyword.equals(keyword)) {
-                return command;
-            }
-        }
-        throw new ZhangWeiException("I don't know the command \"" + keyword
-                + "\". I understand: " + listKeywords() + ".");
+        return Arrays.stream(values())
+                .filter(command -> command.keyword.equals(keyword))
+                .findFirst()
+                .orElseThrow(() -> new ZhangWeiException("I don't know the command \""
+                        + keyword + "\". I understand: " + listKeywords() + "."));
     }
 
     /**
@@ -78,13 +79,8 @@ public enum CommandType {
      * @return the keywords of all commands, e.g. "todo, deadline, event".
      */
     private static String listKeywords() {
-        StringBuilder keywords = new StringBuilder();
-        for (CommandType command : values()) {
-            if (keywords.length() > 0) {
-                keywords.append(", ");
-            }
-            keywords.append(command.keyword);
-        }
-        return keywords.toString();
+        return Arrays.stream(values())
+                .map(CommandType::getKeyword)
+                .collect(Collectors.joining(", "));
     }
 }

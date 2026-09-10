@@ -81,7 +81,7 @@ public class ZhangWei {
         while (!isExitRequested) {
             // The console has already shown everything said so far, so the
             // buffered copy kept for the graphical version is thrown away.
-            ui.drainOutput();
+            ui.clearOutput();
 
             // Anything the chatbot can explain to the user arrives here as a
             // ZhangWeiException, so one handler reports them all.

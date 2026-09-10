@@ -1,17 +1,12 @@
 package zhangwei.task;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * A task that runs between a start and an end date,
  * e.g. "project meeting (from: Dec 3 2019 to: Dec 4 2019)".
  */
 public class Event extends Task {
-
-    private static final DateTimeFormatter DISPLAY_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
     /** The date this event starts. */
     private final LocalDate from;
@@ -60,7 +55,7 @@ public class Event extends Task {
     @Override
     public String toString() {
         return "[E]" + super.toString() + " (from: "
-                + from.format(DISPLAY_FORMAT) + " to: "
-                + to.format(DISPLAY_FORMAT) + ")";
+                + DateDisplay.format(from) + " to: "
+                + DateDisplay.format(to) + ")";
     }
 }

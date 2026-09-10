@@ -189,7 +189,18 @@ public class Ui {
         buffer.setLength(0);
         assert buffer.isEmpty()
                 : "Draining must empty the buffer, or each reply would repeat the ones before it.";
+        clearOutput();
         return output;
+    }
+
+    /**
+     * Forgets everything said since the last drain, without handing it over.
+     *
+     * <p>The console front end has already put those words on the screen, so
+     * it has nothing to do with the copy kept for the graphical one.
+     */
+    public void clearOutput() {
+        buffer.setLength(0);
     }
 
     /**
