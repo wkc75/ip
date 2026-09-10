@@ -10,12 +10,14 @@ import zhangwei.task.TaskList;
  * Deals with everything the user sees and types: it reads commands from the
  * console and prints the chatbot's replies.
  *
- * <p>Collecting the console work here means the rest of the program never
+ * <p>
+ * Collecting the console work here means the rest of the program never
  * calls {@code System.out} directly, so the wording of a message can be
  * changed, or the whole console replaced with a window, without touching the
  * classes that decide what to say.
  *
- * <p>Every line is written twice: once to the console, and once to an internal
+ * <p>
+ * Every line is written twice: once to the console, and once to an internal
  * buffer that {@link #drainOutput()} hands over. The console version of the
  * chatbot ignores the buffer, while the graphical version reads it instead of
  * the console, so both front ends get the same words from the same code.
@@ -25,11 +27,11 @@ public class Ui {
     /**
      * The chatbot's name in ASCII art, shown once at startup.
      *
-     * <p>Each backslash in the art must be written as \\ in a Java string
+     * <p>
+     * Each backslash in the art must be written as \\ in a Java string
      * literal, because \ starts an escape sequence.
      */
-    private static final String BANNER =
-            " ______                     __        __   _ \n"
+    private static final String BANNER = " ______                     __        __   _ \n"
             + "|__  / |__   __ _ _ __   __ \\ \\      / /__(_)\n"
             + "  / /| '_ \\ / _` | '_ \\ / _` \\ \\ /\\ / / _ \\ |\n"
             + " / /_| | | | (_| | | | | (_| |\\ V  V /  __/ |\n"
@@ -54,7 +56,8 @@ public class Ui {
     /**
      * Prints the greeting alone, without the banner.
      *
-     * <p>The banner is drawn with spaces and slashes, so it only lines up in a
+     * <p>
+     * The banner is drawn with spaces and slashes, so it only lines up in a
      * fixed-width console; a window shows this shorter greeting instead.
      */
     public void showGreeting() {
@@ -89,7 +92,8 @@ public class Ui {
     /**
      * Prints something that went wrong, in words the user can act on.
      *
-     * <p>Separate from {@link #showMessage} so that errors can later be
+     * <p>
+     * Separate from {@link #showMessage} so that errors can later be
      * highlighted (a prefix, a colour, a different stream) in one place.
      *
      * @param message the explanation of what went wrong.
@@ -101,7 +105,7 @@ public class Ui {
     /**
      * Confirms that a task was added, and reports the new task count.
      *
-     * @param task the task that was just added.
+     * @param task      the task that was just added.
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskAdded(Task task, int taskCount) {
@@ -113,7 +117,7 @@ public class Ui {
     /**
      * Confirms that a task was removed, and reports the new task count.
      *
-     * @param task the task that was just removed.
+     * @param task      the task that was just removed.
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskRemoved(Task task, int taskCount) {
@@ -158,7 +162,8 @@ public class Ui {
      * Prints the tasks that matched a search, numbered from 1 among the
      * matches rather than by their position in the full list.
      *
-     * <p>An empty result gets its own sentence instead of a heading with
+     * <p>
+     * An empty result gets its own sentence instead of a heading with
      * nothing under it, which would read as though something went wrong.
      *
      * @param matches the matching tasks, in the order they appear in the list.
@@ -179,24 +184,25 @@ public class Ui {
      * Returns everything said since this method was last called, and forgets
      * it, so that the next caller only sees the reply to the next command.
      *
-     * <p>The console front end has already printed this text and throws the
+     * <p>
+     * The console front end has already printed this text and throws the
      * copy away; the graphical front end shows the copy in a dialog bubble.
      *
      * @return the buffered text, with the trailing line separator removed.
      */
     public String drainOutput() {
         String output = buffer.toString().strip();
-        buffer.setLength(0);
+        clearOutput();
         assert buffer.isEmpty()
                 : "Draining must empty the buffer, or each reply would repeat the ones before it.";
-        clearOutput();
         return output;
     }
 
     /**
      * Forgets everything said since the last drain, without handing it over.
      *
-     * <p>The console front end has already put those words on the screen, so
+     * <p>
+     * The console front end has already put those words on the screen, so
      * it has nothing to do with the copy kept for the graphical one.
      */
     public void clearOutput() {
@@ -224,7 +230,8 @@ public class Ui {
     /**
      * Says one line, to the console and to the buffer.
      *
-     * <p>Every message in this class goes through here, so a front end that
+     * <p>
+     * Every message in this class goes through here, so a front end that
      * cannot use the console only has to read the buffer.
      *
      * @param message the line to say.
