@@ -1,17 +1,12 @@
 package zhangwei.task;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 
 /**
  * A task that must be done before a specific date,
  * e.g. "return book (by: Dec 2 2019)".
  */
 public class Deadline extends Task {
-
-    private static final DateTimeFormatter DISPLAY_FORMAT =
-            DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
 
     /** The date this task must be done by. */
     private final LocalDate by;
@@ -46,6 +41,6 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: "
-                + by.format(DISPLAY_FORMAT) + ")";
+                + DateDisplay.format(by) + ")";
     }
 }
