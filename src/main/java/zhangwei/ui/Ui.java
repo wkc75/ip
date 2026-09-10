@@ -187,6 +187,8 @@ public class Ui {
     public String drainOutput() {
         String output = buffer.toString().strip();
         buffer.setLength(0);
+        assert buffer.isEmpty()
+                : "Draining must empty the buffer, or each reply would repeat the ones before it.";
         return output;
     }
 
