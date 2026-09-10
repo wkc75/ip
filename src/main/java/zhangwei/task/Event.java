@@ -1,6 +1,7 @@
 package zhangwei.task;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * A task that runs between a start and an end date,
@@ -43,6 +44,18 @@ public class Event extends Task {
      */
     public LocalDate getTo() {
         return to;
+    }
+
+    /**
+     * Returns the date this event is anchored to, which is the date it starts.
+     * An event is placed by when it begins, the way it would be read off a
+     * calendar.
+     *
+     * @return the start date, never empty.
+     */
+    @Override
+    public Optional<LocalDate> getDate() {
+        return Optional.of(from);
     }
 
     /**

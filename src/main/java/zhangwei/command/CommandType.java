@@ -28,6 +28,8 @@ public enum CommandType {
     LIST("list"),
     /** Shows the tasks whose description contains a given keyword. */
     FIND("find"),
+    /** Puts the task list into a given order and keeps it that way. */
+    SORT("sort"),
     /** Marks a numbered task as done. */
     MARK("mark"),
     /** Marks a numbered task as not done. */

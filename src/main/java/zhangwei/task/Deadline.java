@@ -1,6 +1,7 @@
 package zhangwei.task;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 /**
  * A task that must be done before a specific date,
@@ -29,6 +30,17 @@ public class Deadline extends Task {
      */
     public LocalDate getBy() {
         return by;
+    }
+
+    /**
+     * Returns the date this deadline is anchored to, which is the date it is
+     * due by.
+     *
+     * @return the due date, never empty.
+     */
+    @Override
+    public Optional<LocalDate> getDate() {
+        return Optional.of(by);
     }
 
     /**

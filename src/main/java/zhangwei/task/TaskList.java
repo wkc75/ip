@@ -70,6 +70,19 @@ public class TaskList {
     }
 
     /**
+     * Reorders the tasks by the given criterion.
+     *
+     * <p>The sort is stable, so tasks the criterion cannot tell apart keep the
+     * order they were already in, and sorting twice the same way changes
+     * nothing.
+     *
+     * @param criterion the order to put the tasks into.
+     */
+    public void sort(SortCriterion criterion) {
+        tasks.sort(criterion.getComparator());
+    }
+
+    /**
      * Returns how many tasks are in the list.
      *
      * @return the number of tasks held.

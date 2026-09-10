@@ -3,6 +3,7 @@ package zhangwei.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import zhangwei.task.SortCriterion;
 import zhangwei.task.Task;
 import zhangwei.task.TaskList;
 
@@ -156,6 +157,18 @@ public class Ui {
         for (int i = 1; i <= tasks.size(); i++) {
             say(i + "." + tasks.get(i));
         }
+    }
+
+    /**
+     * Confirms the order the list was just put into, then shows it, so the
+     * user can read off the numbers the next command will use.
+     *
+     * @param criterion the order the list was sorted into.
+     * @param tasks the task list, already sorted.
+     */
+    public void showTasksSorted(SortCriterion criterion, TaskList tasks) {
+        say("Sorted your tasks by " + criterion.getKeyword() + ".");
+        showTaskList(tasks);
     }
 
     /**

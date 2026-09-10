@@ -12,9 +12,11 @@ import zhangwei.command.ExitCommand;
 import zhangwei.command.FindCommand;
 import zhangwei.command.ListCommand;
 import zhangwei.command.MarkCommand;
+import zhangwei.command.SortCommand;
 import zhangwei.command.UnmarkCommand;
 import zhangwei.task.Deadline;
 import zhangwei.task.Event;
+import zhangwei.task.SortCriterion;
 import zhangwei.task.Todo;
 
 /**
@@ -53,6 +55,7 @@ public class Parser {
         case BYE -> new ExitCommand();
         case LIST -> new ListCommand();
         case FIND -> new FindCommand(parseKeyword(arguments));
+        case SORT -> new SortCommand(parseSortCriterion(arguments));
         case MARK -> new MarkCommand(parseTaskNumber(arguments, type));
         case UNMARK -> new UnmarkCommand(parseTaskNumber(arguments, type));
         case DELETE -> new DeleteCommand(parseTaskNumber(arguments, type));
@@ -103,6 +106,23 @@ public class Parser {
                     + "For example: find book");
         }
         return arguments;
+    }
+
+    /**
+     * Returns the criterion the user wants the list sorted by.
+     *
+     * @param arguments the text typed after "sort", e.g. "date".
+     * @return the criterion that text names.
+     * @throws ZhangWeiException if no criterion was given, or the one given is
+     *     not a criterion this chatbot knows.
+     */
+    private static SortCriterion parseSortCriterion(String arguments)
+            throws ZhangWeiException {
+        if (arguments.isEmpty()) {
+            throw new ZhangWeiException("Sort by what? For example: sort date. "
+                    + "I can sort by: " + SortCriterion.listKeywords() + ".");
+        }
+        return SortCriterion.fromKeyword(arguments);
     }
 
     /**

@@ -1,5 +1,8 @@
 package zhangwei.task;
 
+import java.time.LocalDate;
+import java.util.Optional;
+
 /**
  * A task tracked by the chatbot: a description plus whether it is done.
  * Subclasses add whatever extra detail their task type needs.
@@ -50,6 +53,20 @@ public class Task {
      */
     public boolean isDone() {
         return isDone;
+    }
+
+    /**
+     * Returns the date this task is anchored to, if it has one.
+     *
+     * <p>A task type that carries no date -- a todo -- has nothing to be
+     * ordered by, so it answers with an empty Optional rather than a stand-in
+     * date that would sort it somewhere misleading. Subclasses that do have a
+     * date override this.
+     *
+     * @return the date this task is anchored to, or empty if it has none.
+     */
+    public Optional<LocalDate> getDate() {
+        return Optional.empty();
     }
 
     /** Marks this task as done. */

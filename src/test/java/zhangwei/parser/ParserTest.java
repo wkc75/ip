@@ -134,6 +134,29 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_sortWithCriterion_listReordered() throws ZhangWeiException {
+        TaskList tasks = new TaskList();
+        runOn(tasks, "todo zebra");
+        runOn(tasks, "todo apple");
+        runOn(tasks, "sort description");
+
+        assertEquals("apple", tasks.get(1).getDescription());
+        assertEquals("zebra", tasks.get(2).getDescription());
+    }
+
+    @Test
+    public void parse_sortWithoutCriterion_exceptionListsTheValidOnes() {
+        ZhangWeiException e = assertThrows(ZhangWeiException.class,
+                () -> Parser.parse("sort"));
+        assertTrue(e.getMessage().contains("date, description, status"));
+    }
+
+    @Test
+    public void parse_sortWithUnknownCriterion_exceptionThrown() {
+        assertThrows(ZhangWeiException.class, () -> Parser.parse("sort banana"));
+    }
+
+    @Test
     public void parse_emptyInput_exceptionThrown() {
         assertThrows(ZhangWeiException.class, () -> Parser.parse(""));
     }
