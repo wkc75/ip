@@ -105,6 +105,11 @@ public class ParserTest {
         assertInstanceOf(ExitCommand.class, Parser.parse("bye   "));
     }
 
+    @Test
+    public void parse_listWithLeadingSpaces_listCommandReturned() throws ZhangWeiException {
+        assertInstanceOf(ListCommand.class, Parser.parse("   list"));
+    }
+
     // ---------- find ----------
 
     @Test
@@ -318,6 +323,25 @@ public class ParserTest {
         ZhangWeiException e = assertThrows(ZhangWeiException.class,
                 () -> Parser.parse("event project meeting /from 2019-12-03 /to 4/12/2019"));
         assertTrue(e.getMessage().contains("/to"));
+    }
+
+    @Test
+    public void parse_eventEndingBeforeStart_exceptionThrown() {
+        assertThrows(ZhangWeiException.class,
+                () -> Parser.parse("event project meeting /from 2019-12-05 /to 2019-12-01"));
+    }
+
+    @Test
+    public void parse_eventWithToBeforeFrom_exceptionThrown() {
+        // Otherwise the two dates would be read the wrong way round.
+        assertThrows(ZhangWeiException.class,
+                () -> Parser.parse("event project meeting /to 2019-12-04 /from 2019-12-03"));
+    }
+
+    @Test
+    public void parse_eventStartingAndEndingSameDay_eventAdded() throws ZhangWeiException {
+        assertInstanceOf(AddCommand.class,
+                Parser.parse("event project meeting /from 2019-12-03 /to 2019-12-03"));
     }
 
     @Test

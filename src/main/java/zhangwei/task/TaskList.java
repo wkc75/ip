@@ -142,8 +142,9 @@ public class TaskList {
                     + taskNumber + ".");
         }
         if (taskNumber < 1 || taskNumber > tasks.size()) {
+            String noun = tasks.size() == 1 ? "task" : "tasks";
             throw new ZhangWeiException("There is no task " + taskNumber + ". "
-                    + "You have " + tasks.size() + " tasks.");
+                    + "You have " + tasks.size() + " " + noun + ".");
         }
     }
 }

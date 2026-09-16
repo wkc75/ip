@@ -48,7 +48,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -64,7 +64,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [D][ ] return book (by: Dec 2 2019)
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -80,7 +80,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [E][ ] project meeting (from: Dec 3 2019 to: Dec 4 2019)
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -94,7 +94,7 @@ bye
 ```
 
 ```text
-Here are the tasks growing in your grove:
+Your grove is empty. Plant a task with todo, deadline or event.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -113,7 +113,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Got it. I've planted this task in your grove:
   [D][ ] return book (by: Jun 6 2019)
 Now you have 2 tasks in your grove.
@@ -144,7 +144,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Nice! This task is done, have a bamboo shoot:
   [T][X] read book
 Here are the tasks growing in your grove:
@@ -172,7 +172,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] aaa
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Got it. I've planted this task in your grove:
   [T][ ] bbb
 Now you have 2 tasks in your grove.
@@ -213,7 +213,7 @@ bye
 ```
 
 ```text
-I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, delete, bye.
+I don't know the command "blah". I understand: todo, deadline, event, list, find, sort, mark, unmark, delete, bye.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -265,8 +265,8 @@ Which task? For example: mark 2
 You have no tasks yet, so there is no task 3.
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
-There is no task 3. You have 1 tasks.
+Now you have 1 task in your grove.
+There is no task 3. You have 1 task.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 
@@ -284,8 +284,8 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
-I don't know the command "blah". I understand: todo, deadline, event, list, mark, unmark, delete, bye.
+Now you have 1 task in your grove.
+I don't know the command "blah". I understand: todo, deadline, event, list, find, sort, mark, unmark, delete, bye.
 Here are the tasks growing in your grove:
 1.[T][ ] read book
 Bye. Time for my bamboo nap. Come back soon!
@@ -308,7 +308,7 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Got it. I've planted this task in your grove:
   [D][ ] return book (by: Jun 6 2019)
 Now you have 2 tasks in your grove.
@@ -340,9 +340,9 @@ bye
 ```text
 Got it. I've planted this task in your grove:
   [T][ ] read book
-Now you have 1 tasks in your grove.
+Now you have 1 task in your grove.
 Which task? For example: delete 2
-There is no task 9. You have 1 tasks.
+There is no task 9. You have 1 task.
 Here are the tasks growing in your grove:
 1.[T][ ] read book
 Bye. Time for my bamboo nap. Come back soon!
@@ -365,7 +365,7 @@ bye
 The /by date must use yyyy-MM-dd, for example 2019-12-02.
 The /from date must use yyyy-MM-dd, for example 2019-12-02.
 The /to date must use yyyy-MM-dd, for example 2019-12-02.
-Here are the tasks growing in your grove:
+Your grove is empty. Plant a task with todo, deadline or event.
 Bye. Time for my bamboo nap. Come back soon!
 ```
 

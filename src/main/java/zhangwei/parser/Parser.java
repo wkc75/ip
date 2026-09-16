@@ -45,10 +45,12 @@ public class Parser {
      * @throws ZhangWeiException if the line does not describe a usable command.
      */
     public static Command parse(String fullCommand) throws ZhangWeiException {
+        // Stray spaces before the keyword would otherwise make it unrecognisable.
+        String command = fullCommand.strip();
         // The first word is the command keyword; the rest is its argument.
-        String keyword = fullCommand.split(" ")[0];
+        String keyword = command.split(" ")[0];
         // Everything after the keyword, e.g. "return book /by 2019-12-02".
-        String arguments = fullCommand.substring(keyword.length()).trim();
+        String arguments = command.substring(keyword.length()).trim();
 
         CommandType type = CommandType.fromKeyword(keyword);
         return switch (type) {
@@ -166,7 +168,8 @@ public class Parser {
      *
      * @param arguments the text typed after "event".
      * @return the event described by that text.
-     * @throws ZhangWeiException if the description or either date is invalid.
+     * @throws ZhangWeiException if the description or either date is invalid,
+     *     or if the event would end before it starts.
      */
     private static Event parseEvent(String arguments) throws ZhangWeiException {
         String[] parts = arguments.split("/from|/to");
@@ -179,6 +182,13 @@ public class Parser {
         rejectSeparator(arguments);
         LocalDate from = parseDate(parts[1].trim(), "/from");
         LocalDate to = parseDate(parts[2].trim(), "/to");
+        // This also catches "/to ... /from ...", where the split above would
+        // otherwise hand the two dates over the wrong way round.
+        if (to.isBefore(from)) {
+            throw new ZhangWeiException("An event cannot end before it starts. "
+                    + "Put /from before /to, for example: event project meeting "
+                    + "/from 2019-12-03 /to 2019-12-04");
+        }
         return new Event(parts[0].trim(), from, to);
     }
 

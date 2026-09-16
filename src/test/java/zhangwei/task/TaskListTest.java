@@ -216,6 +216,13 @@ public class TaskListTest {
     }
 
     @Test
+    public void requireTask_numberAboveSizeOfOne_singularTaskInMessage() {
+        ZhangWeiException e = assertThrows(ZhangWeiException.class,
+                () -> listOf(1).requireTask(2));
+        assertTrue(e.getMessage().contains("You have 1 task."));
+    }
+
+    @Test
     public void requireTask_firstTaskNumber_noExceptionThrown() {
         assertDoesNotThrow(() -> listOf(3).requireTask(1));
     }

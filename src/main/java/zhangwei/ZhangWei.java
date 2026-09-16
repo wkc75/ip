@@ -46,9 +46,9 @@ public class ZhangWei {
      * Creates a chatbot that keeps its tasks in the given file.
      *
      * <p>A save file that cannot be read is not fatal: the chatbot starts with
-     * an empty list and says so, leaving the file untouched so it can be
-     * repaired, because a chatbot that still works is more useful than one
-     * that refuses to start.
+     * an empty list and says so, after the storage has kept a copy of the
+     * file so it can be repaired, because a chatbot that still works is more
+     * useful than one that refuses to start.
      *
      * @param filePath path of the text file the tasks are loaded from and
      *     saved to, e.g. "./data/zhangwei.txt".

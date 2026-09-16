@@ -57,11 +57,11 @@ public class ListCommandTest {
     }
 
     @Test
-    public void execute_emptyList_headingShownWithoutTasks() {
+    public void execute_emptyList_emptyMessageShownWithoutHeading() {
         runListOn(new TaskList());
         String output = captured.toString();
-        assertTrue(output.contains("Here are the tasks growing in your grove:"));
-        assertFalse(output.contains("1."));
+        assertTrue(output.contains("Your grove is empty."));
+        assertFalse(output.contains("Here are the tasks growing in your grove:"));
     }
 
     @Test

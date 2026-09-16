@@ -1,5 +1,6 @@
 package zhangwei.storage;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
@@ -134,6 +135,20 @@ public class StorageTest {
         assertEquals(2, result.tasks().size());
         assertEquals(0, result.skippedLines());
         assertNull(result.backupPath());
+    }
+
+    @Test
+    public void loadTasks_fileNotValidText_exceptionThrownAndBackupKept() throws Exception {
+        // 0xE9 on its own is not valid UTF-8, so the whole file is unreadable.
+        byte[] original = {'T', ' ', '|', ' ', '0', ' ', '|', ' ', 'c', 'a', 'f', (byte) 0xE9};
+        Files.write(saveFile, original);
+
+        ZhangWeiException e = assertThrows(ZhangWeiException.class, this::load);
+
+        // The next save would overwrite the file, so a copy must survive.
+        Path backup = saveFile.resolveSibling("tasks.txt.corrupt");
+        assertTrue(e.getMessage().contains(backup.toString()));
+        assertArrayEquals(original, Files.readAllBytes(backup));
     }
 
     @Test

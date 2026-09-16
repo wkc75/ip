@@ -72,7 +72,7 @@ public class AddCommandTest {
         String output = captured.toString();
         assertTrue(output.contains("I've planted this task"));
         assertTrue(output.contains("read book"));
-        assertTrue(output.contains("Now you have 1 tasks in your grove."));
+        assertTrue(output.contains("Now you have 1 task in your grove."));
     }
 
     @Test

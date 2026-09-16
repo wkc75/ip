@@ -3,6 +3,7 @@ package zhangwei.ui;
 import java.util.List;
 import java.util.Scanner;
 
+import zhangwei.command.CommandType;
 import zhangwei.task.SortCriterion;
 import zhangwei.task.Task;
 import zhangwei.task.TaskList;
@@ -70,10 +71,16 @@ public class Ui {
     /**
      * Reads one line of input from the console.
      *
-     * @return the next line the user types, without the line separator.
+     * <p>
+     * If the input has run out (the user pressed Ctrl-D, or piped-in input
+     * ended without a bye), the bye command is returned instead, so the
+     * session ends with the usual farewell rather than a crash.
+     *
+     * @return the next line the user types, without the line separator, or
+     *     the bye keyword if there is no more input.
      */
     public String readCommand() {
-        return scanner.nextLine();
+        return scanner.hasNextLine() ? scanner.nextLine() : CommandType.BYE.getKeyword();
     }
 
     /** Prints the farewell shown just before the chatbot exits. */
@@ -151,9 +158,18 @@ public class Ui {
     /**
      * Prints every stored task, numbered from 1, with its done status.
      *
+     * <p>
+     * An empty list gets its own sentence instead of a heading with nothing
+     * under it, which would read as though something went wrong.
+     *
      * @param tasks the task list to show.
      */
     public void showTaskList(TaskList tasks) {
+        if (tasks.isEmpty()) {
+            say("Your grove is empty. Plant a task with todo, deadline or event.");
+            return;
+        }
+
         say("Here are the tasks growing in your grove:");
         for (int i = 1; i <= tasks.size(); i++) {
             say(i + "." + tasks.get(i));
@@ -238,7 +254,8 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     private void showTaskCount(int taskCount) {
-        say("Now you have " + taskCount + " tasks in your grove.");
+        String noun = taskCount == 1 ? "task" : "tasks";
+        say("Now you have " + taskCount + " " + noun + " in your grove.");
     }
 
     /**

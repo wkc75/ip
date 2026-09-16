@@ -96,6 +96,7 @@ public class Storage {
      * @return the tasks recovered, along with how much was skipped and where
      *     the damaged file was backed up.
      * @throws ZhangWeiException if the file exists but cannot be read at all.
+     *     A copy of the file is kept first, as for damaged lines.
      */
     public LoadResult loadTasks() throws ZhangWeiException {
         List<Task> tasks = new ArrayList<>();
@@ -107,8 +108,14 @@ public class Storage {
         try {
             lines = Files.readAllLines(filePath);
         } catch (IOException e) {
+            // The next save would overwrite the unreadable file, so a copy is
+            // kept first. A folder in the file's place holds no tasks to keep.
+            Path backupPath = Files.isRegularFile(filePath) ? backUpDamagedFile() : null;
+            String backupNote = backupPath == null
+                    ? ""
+                    : " The original file is kept at " + backupPath + ".";
             throw new ZhangWeiException("I could not read your saved tasks from "
-                    + filePath + " (" + e.getMessage() + ").");
+                    + filePath + " (" + e.getMessage() + ")." + backupNote);
         }
 
         int skippedLines = 0;
