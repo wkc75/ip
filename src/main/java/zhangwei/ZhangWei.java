@@ -36,6 +36,13 @@ public class ZhangWei {
     private boolean isExitRequested = false;
 
     /**
+     * Whether the last {@link #getResponse(String)} answered with a complaint
+     * rather than a result. The graphical version reads this to decide how the
+     * reply should be shown.
+     */
+    private boolean isErrorResponse = false;
+
+    /**
      * Creates a chatbot that keeps its tasks in the given file.
      *
      * <p>A save file that cannot be read is not fatal: the chatbot starts with
@@ -133,14 +140,26 @@ public class ZhangWei {
             return "";
         }
 
+        isErrorResponse = false;
         try {
             Command command = Parser.parse(input);
             command.execute(tasks, ui, storage);
             isExitRequested = command.isExit();
         } catch (ZhangWeiException e) {
+            isErrorResponse = true;
             ui.showError(e.getMessage());
         }
         return ui.drainOutput();
+    }
+
+    /**
+     * Returns whether the reply to the last line of input was a complaint
+     * about that line, so that the graphical version can highlight it.
+     *
+     * @return true if the last command failed, false if it was carried out.
+     */
+    public boolean isErrorResponse() {
+        return isErrorResponse;
     }
 
     /**

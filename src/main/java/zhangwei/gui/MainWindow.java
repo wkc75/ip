@@ -71,9 +71,12 @@ public class MainWindow {
         }
 
         String response = zhangWei.getResponse(input);
+        DialogBox reply = zhangWei.isErrorResponse()
+                ? DialogBox.getErrorDialog(response, zhangWeiImage)
+                : DialogBox.getZhangWeiDialog(response, zhangWeiImage);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getZhangWeiDialog(response, zhangWeiImage));
+                reply);
 
         if (zhangWei.isExitRequested()) {
             closeAfterGoodbye();

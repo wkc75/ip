@@ -23,8 +23,12 @@ import javafx.scene.shape.Circle;
  */
 public class DialogBox extends HBox {
 
-    /** Half the width of the speaker's picture, used to round it off. */
-    private static final double PICTURE_RADIUS = 24.0;
+    /**
+     * How much of the window's width a bubble may take up. The rest is left
+     * free so a reply still reads as one side of a conversation, however wide
+     * the user drags the window.
+     */
+    private static final double MAX_BUBBLE_FRACTION = 0.82;
 
     @FXML
     private Label dialog;
@@ -53,6 +57,10 @@ public class DialogBox extends HBox {
         dialog.setText(text);
         displayPicture.setImage(image);
         roundOff(displayPicture);
+
+        // Bound rather than fixed, so the bubbles grow and shrink with the
+        // window instead of keeping a width chosen for one window size.
+        dialog.maxWidthProperty().bind(widthProperty().multiply(MAX_BUBBLE_FRACTION));
     }
 
     /**
@@ -80,6 +88,21 @@ public class DialogBox extends HBox {
     }
 
     /**
+     * Returns a bubble for a complaint the chatbot made, shown on the left in
+     * the error colours so that a rejected command stands out from a reply
+     * that worked.
+     *
+     * @param text the explanation of what went wrong.
+     * @param image the chatbot's picture.
+     * @return the bubble, ready to be added to the conversation.
+     */
+    public static DialogBox getErrorDialog(String text, Image image) {
+        DialogBox box = getZhangWeiDialog(text, image);
+        box.dialog.getStyleClass().add("error-label");
+        return box;
+    }
+
+    /**
      * Moves the picture to the left of the text and lines the bubble up on
      * that side, so the chatbot's replies face the user's messages.
      */
@@ -99,7 +122,10 @@ public class DialogBox extends HBox {
      * @param picture the picture to round off.
      */
     private static void roundOff(ImageView picture) {
-        Circle clip = new Circle(PICTURE_RADIUS, PICTURE_RADIUS, PICTURE_RADIUS);
+        // Taken from the view's own size, so the clip follows whatever size
+        // DialogBox.fxml gives the picture.
+        double radius = picture.getFitWidth() / 2;
+        Circle clip = new Circle(radius, radius, radius);
         picture.setClip(clip);
     }
 }

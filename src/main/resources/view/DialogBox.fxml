@@ -4,12 +4,12 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 
-<fx:root alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" spacing="10.0"
+<fx:root alignment="TOP_RIGHT" maxWidth="1.7976931348623157E308" spacing="8.0"
          type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label fx:id="dialog" maxWidth="300.0" styleClass="dialog-label" wrapText="true" />
-      <ImageView fx:id="displayPicture" fitHeight="48.0" fitWidth="48.0"
+      <Label fx:id="dialog" styleClass="dialog-label" wrapText="true" />
+      <ImageView fx:id="displayPicture" fitHeight="28.0" fitWidth="28.0"
                  pickOnBounds="true" preserveRatio="true" />
    </children>
 </fx:root>
