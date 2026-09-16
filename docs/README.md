@@ -10,7 +10,8 @@ the next time you open the app.
 ## Quick start
 
 1. Make sure you have **Java 25** installed. You can check with `java -version`.
-1. Download `zhangwei.jar` from the latest release.
+1. Download `zhangwei.jar` from the
+   [latest release](https://github.com/wkc75/ip/releases/latest).
 1. Put it in an empty folder, open a terminal in that folder, and run:
 
    ```text
@@ -22,9 +23,15 @@ the next time you open the app.
 Your tasks are saved in `data/zhangwei.txt`, inside the folder you ran the
 command from.
 
+Try `todo buy bamboo shoots`, then `list`, to see Wei at work.
+
+If Wei cannot understand a command, the reply appears in a highlighted bubble
+and says what went wrong, usually with an example of the right format.
+
 ## Notes about the command format
 
-* Command words are lower case: `list` works, `LIST` does not.
+* Command words are lower case: `list` works, `LIST` does not. The same goes
+  for the words after `sort`.
 * Words in `UPPER_CASE` are what you fill in, e.g. in `todo DESCRIPTION`,
   `DESCRIPTION` could be `read book`.
 * Dates use the `yyyy-MM-dd` format, e.g. `2026-09-19`. Wei shows them as
@@ -77,7 +84,8 @@ Now you have 3 tasks in your grove.
 
 ## Listing all tasks: `list`
 
-Shows every task, numbered from 1. `[X]` means the task is done.
+Shows every task, numbered from 1. The first bracket shows the task type
+(`T` todo, `D` deadline, `E` event); `[X]` in the second means the task is done.
 
 Format: `list`
 
@@ -126,10 +134,14 @@ Now you have 2 tasks in your grove.
 
 ## Finding tasks: `find`
 
-Shows the tasks whose description contains the given words. Upper and lower
-case are treated the same, so `find IP` also finds `submit iP`.
+Shows the tasks whose description contains the given text.
 
-Format: `find KEYWORD`
+* Upper and lower case are treated the same, so `find IP` also finds `submit iP`.
+* Part of a word is enough: `find book` also finds `booking`.
+* Several words are searched as one phrase: `find buy bamboo` finds
+  `buy bamboo shoots` but not `buy fresh bamboo`.
+
+Format: `find TEXT`
 
 Example: `find ip`
 
@@ -137,6 +149,10 @@ Example: `find ip`
 Here are the matching tasks I found in your grove:
 1.[D][ ] submit iP (by: Sep 19 2026)
 ```
+
+> **Note:** results are numbered 1, 2, 3... among the matches, not by their
+> place in the full list. Check `list` for the right `TASK_NUMBER` before you
+> `mark` or `delete`.
 
 ## Sorting tasks: `sort`
 
@@ -146,7 +162,7 @@ to match.
 Format: `sort CRITERION`, where `CRITERION` is one of:
 
 * `date`: earliest first. Todos have no date, so they go last.
-* `description`: A to Z.
+* `description`: A to Z, ignoring upper and lower case.
 * `status`: tasks not done first, then done tasks.
 
 Example: `sort date`
@@ -185,6 +201,6 @@ original file as `data/zhangwei.txt.corrupt`.
 | Mark | `mark TASK_NUMBER` |
 | Unmark | `unmark TASK_NUMBER` |
 | Delete | `delete TASK_NUMBER` |
-| Find | `find KEYWORD` |
+| Find | `find TEXT` |
 | Sort | `sort date`, `sort description` or `sort status` |
 | Exit | `bye` |
