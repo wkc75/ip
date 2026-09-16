@@ -25,19 +25,20 @@ import zhangwei.task.TaskList;
  */
 public class Ui {
 
+    /** The chatbot's name, shown in the greeting and the window title. */
+    public static final String NAME = "Wei the Panda";
+
     /**
-     * The chatbot's name in ASCII art, shown once at startup.
+     * A small panda drawn in ASCII art, shown once at startup.
      *
      * <p>
      * Each backslash in the art must be written as \\ in a Java string
      * literal, because \ starts an escape sequence.
      */
-    private static final String BANNER = " ______                     __        __   _ \n"
-            + "|__  / |__   __ _ _ __   __ \\ \\      / /__(_)\n"
-            + "  / /| '_ \\ / _` | '_ \\ / _` \\ \\ /\\ / / _ \\ |\n"
-            + " / /_| | | | (_| | | | | (_| |\\ V  V /  __/ |\n"
-            + "/____|_| |_|\\__,_|_| |_|\\__, | \\_/\\_/ \\___|_|\n"
-            + "                        |___/\n";
+    private static final String BANNER = " (@)___(@)\n"
+            + " ( o   o )    " + NAME + "\n"
+            + "  \\  v  /     keeper of your bamboo grove\n"
+            + "   `---'\n";
 
     private final Scanner scanner = new Scanner(System.in);
 
@@ -62,8 +63,8 @@ public class Ui {
      * fixed-width console; a window shows this shorter greeting instead.
      */
     public void showGreeting() {
-        say("Hello! I'm ZhangWei.");
-        say("What can I do for you?");
+        say("*munch munch* Oh, hello! I'm " + NAME + ".");
+        say("What shall we plant in your task grove today?");
     }
 
     /**
@@ -77,7 +78,7 @@ public class Ui {
 
     /** Prints the farewell shown just before the chatbot exits. */
     public void showGoodbye() {
-        say("Bye. Hope to see you again soon!");
+        say("Bye. Time for my bamboo nap. Come back soon!");
     }
 
     /**
@@ -110,7 +111,7 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        say("Got it. I've added this task:");
+        say("Got it. I've planted this task in your grove:");
         showTask(task);
         showTaskCount(taskCount);
     }
@@ -122,7 +123,7 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     public void showTaskRemoved(Task task, int taskCount) {
-        say("Noted. I've removed this task:");
+        say("Noted. I've chewed this task away:");
         showTask(task);
         showTaskCount(taskCount);
     }
@@ -133,7 +134,7 @@ public class Ui {
      * @param task the task that was just marked.
      */
     public void showTaskMarked(Task task) {
-        say("Nice! I've marked this task as done:");
+        say("Nice! This task is done, have a bamboo shoot:");
         showTask(task);
     }
 
@@ -143,7 +144,7 @@ public class Ui {
      * @param task the task that was just unmarked.
      */
     public void showTaskUnmarked(Task task) {
-        say("OK, I've marked this task as not done yet:");
+        say("OK, no rush. This task is not done yet:");
         showTask(task);
     }
 
@@ -153,7 +154,7 @@ public class Ui {
      * @param tasks the task list to show.
      */
     public void showTaskList(TaskList tasks) {
-        say("Here are the tasks in your list:");
+        say("Here are the tasks growing in your grove:");
         for (int i = 1; i <= tasks.size(); i++) {
             say(i + "." + tasks.get(i));
         }
@@ -167,7 +168,7 @@ public class Ui {
      * @param tasks the task list, already sorted.
      */
     public void showTasksSorted(SortCriterion criterion, TaskList tasks) {
-        say("Sorted your tasks by " + criterion.getKeyword() + ".");
+        say("Sorted your tasks by " + criterion.getKeyword() + ", neat as a row of bamboo.");
         showTaskList(tasks);
     }
 
@@ -183,11 +184,11 @@ public class Ui {
      */
     public void showMatchingTasks(List<Task> matches) {
         if (matches.isEmpty()) {
-            say("There are no matching tasks in your list.");
+            say("I sniffed around, but no tasks in your grove match.");
             return;
         }
 
-        say("Here are the matching tasks in your list:");
+        say("Here are the matching tasks I found in your grove:");
         for (int i = 0; i < matches.size(); i++) {
             say((i + 1) + "." + matches.get(i));
         }
@@ -237,7 +238,7 @@ public class Ui {
      * @param taskCount how many tasks the list holds now.
      */
     private void showTaskCount(int taskCount) {
-        say("Now you have " + taskCount + " tasks in the list.");
+        say("Now you have " + taskCount + " tasks in your grove.");
     }
 
     /**

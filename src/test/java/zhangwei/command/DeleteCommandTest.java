@@ -80,9 +80,9 @@ public class DeleteCommandTest {
     public void execute_validTaskNumber_confirmationShown() throws ZhangWeiException {
         new DeleteCommand(1).execute(threeTasks(), new Ui(), storage);
         String output = captured.toString();
-        assertTrue(output.contains("I've removed this task"));
+        assertTrue(output.contains("I've chewed this task away"));
         assertTrue(output.contains("task 1"));
-        assertTrue(output.contains("Now you have 2 tasks in the list."));
+        assertTrue(output.contains("Now you have 2 tasks in your grove."));
     }
 
     @Test

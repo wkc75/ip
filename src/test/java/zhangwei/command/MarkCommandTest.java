@@ -86,7 +86,7 @@ public class MarkCommandTest {
     public void execute_validTaskNumber_confirmationShown() throws ZhangWeiException {
         new MarkCommand(1).execute(threeTasks(), new Ui(), storage);
         String output = captured.toString();
-        assertTrue(output.contains("marked this task as done"));
+        assertTrue(output.contains("This task is done"));
         assertTrue(output.contains("[T][X] task 1"));
     }
 

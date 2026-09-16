@@ -1,7 +1,8 @@
-/* Colours and spacing for the chat window. */
+/* Colours and spacing for the chat window: bamboo greens to suit Wei the Panda. */
 
 .root-pane {
-    -fx-background-color: #f4f5f7;
+    -fx-background-color: linear-gradient(to bottom, #eef6e8, #dcebd2);
+    -fx-font-family: "Trebuchet MS", "Verdana", sans-serif;
 }
 
 .chat-scroll {
@@ -20,7 +21,7 @@
 
 /* What the user typed: a filled bubble on the right. */
 .dialog-label {
-    -fx-background-color: #3d6fd8;
+    -fx-background-color: #4f8a3c;
     -fx-text-fill: white;
     -fx-background-radius: 14 14 2 14;
     -fx-padding: 9 13 9 13;
@@ -30,11 +31,11 @@
 /* What the chatbot replied: a pale bubble on the left. */
 .reply-label {
     -fx-background-color: white;
-    -fx-text-fill: #1f2430;
+    -fx-text-fill: #26331f;
     -fx-background-radius: 14 14 14 2;
     -fx-padding: 9 13 9 13;
     -fx-font-size: 13px;
-    -fx-border-color: #dfe2e8;
+    -fx-border-color: #c3dbb5;
     -fx-border-radius: 14 14 14 2;
 }
 
@@ -51,7 +52,7 @@
 .user-input {
     -fx-background-radius: 18;
     -fx-border-radius: 18;
-    -fx-border-color: #cfd4dd;
+    -fx-border-color: #a9c99a;
     -fx-background-color: white;
     -fx-padding: 8 14 8 14;
     -fx-font-size: 13px;
@@ -59,7 +60,7 @@
 
 .send-button {
     -fx-background-radius: 18;
-    -fx-background-color: #3d6fd8;
+    -fx-background-color: #4f8a3c;
     -fx-text-fill: white;
     -fx-padding: 8 16 8 16;
     -fx-font-size: 13px;
@@ -67,5 +68,5 @@
 }
 
 .send-button:hover {
-    -fx-background-color: #35619c;
+    -fx-background-color: #3b6b2c;
 }

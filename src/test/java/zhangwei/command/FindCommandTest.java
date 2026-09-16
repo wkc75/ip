@@ -49,7 +49,7 @@ public class FindCommandTest {
         runFindOn(tasks, "book");
 
         String output = captured.toString();
-        assertTrue(output.contains("Here are the matching tasks in your list:"));
+        assertTrue(output.contains("Here are the matching tasks I found in your grove:"));
         assertTrue(output.contains("1.[T][ ] read book"));
         assertTrue(output.contains("2.[D][ ] return book (by: Dec 2 2019)"));
         assertFalse(output.contains("buy groceries"));
@@ -63,7 +63,7 @@ public class FindCommandTest {
         runFindOn(tasks, "groceries");
 
         String output = captured.toString();
-        assertTrue(output.contains("There are no matching tasks in your list."));
+        assertTrue(output.contains("I sniffed around, but no tasks in your grove match."));
         assertFalse(output.contains("1."));
     }
 

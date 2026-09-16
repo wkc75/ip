@@ -25,7 +25,7 @@
          </content>
       </ScrollPane>
       <TextField fx:id="userInput" onAction="#handleUserInput"
-                 promptText="Type a command, e.g. todo read book"
+                 promptText="Tell Wei a task, e.g. todo eat bamboo"
                  styleClass="user-input" AnchorPane.bottomAnchor="12.0"
                  AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="92.0" />
       <Button mnemonicParsing="false" onAction="#handleUserInput"

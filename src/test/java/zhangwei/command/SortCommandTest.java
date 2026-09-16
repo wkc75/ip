@@ -90,8 +90,8 @@ public class SortCommandTest {
         new SortCommand(SortCriterion.DATE).execute(mixedTasks(), new Ui(), storage);
 
         String output = captured.toString();
-        assertTrue(output.contains("Sorted your tasks by date."));
-        assertTrue(output.contains("Here are the tasks in your list:"));
+        assertTrue(output.contains("Sorted your tasks by date, neat as a row of bamboo."));
+        assertTrue(output.contains("Here are the tasks growing in your grove:"));
         assertTrue(output.contains("1.[D][ ] mango (by: Jan 1 2018)"));
     }
 
@@ -114,7 +114,7 @@ public class SortCommandTest {
 
         String output = captured.toString();
         assertTrue(output.contains("You have no tasks to sort."));
-        assertFalse(output.contains("Here are the tasks in your list:"));
+        assertFalse(output.contains("Here are the tasks growing in your grove:"));
     }
 
     @Test

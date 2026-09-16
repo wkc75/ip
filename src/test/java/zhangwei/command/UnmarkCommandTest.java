@@ -86,7 +86,7 @@ public class UnmarkCommandTest {
     public void execute_doneTask_confirmationShown() throws ZhangWeiException {
         new UnmarkCommand(1).execute(threeDoneTasks(), new Ui(), storage);
         String output = captured.toString();
-        assertTrue(output.contains("marked this task as not done"));
+        assertTrue(output.contains("This task is not done yet"));
         assertTrue(output.contains("[T][ ] task 1"));
     }
 

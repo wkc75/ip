@@ -5,10 +5,12 @@ import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import zhangwei.ZhangWei;
+import zhangwei.ui.Ui;
 
 /**
  * The JavaFX application: it builds the window from
@@ -44,7 +46,8 @@ public class Main extends Application {
             controller.setZhangWei(zhangWei);
 
             stage.setScene(new Scene(root));
-            stage.setTitle("ZhangWei");
+            stage.setTitle(Ui.NAME);
+            stage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/DaZhangWei.png")));
             stage.setMinWidth(MIN_WIDTH);
             stage.setMinHeight(MIN_HEIGHT);
             stage.show();

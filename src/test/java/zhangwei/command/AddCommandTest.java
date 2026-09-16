@@ -70,9 +70,9 @@ public class AddCommandTest {
     public void execute_taskAdded_confirmationShown() throws ZhangWeiException {
         new AddCommand(new Todo("read book")).execute(new TaskList(), new Ui(), storage);
         String output = captured.toString();
-        assertTrue(output.contains("I've added this task"));
+        assertTrue(output.contains("I've planted this task"));
         assertTrue(output.contains("read book"));
-        assertTrue(output.contains("Now you have 1 tasks in the list."));
+        assertTrue(output.contains("Now you have 1 tasks in your grove."));
     }
 
     @Test
