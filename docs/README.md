@@ -90,6 +90,8 @@ Shows every task, numbered from 1. The first bracket shows the task type
 
 Format: `list`
 
+Example: `list`
+
 ```text
 Here are the tasks growing in your grove:
 1.[T][ ] buy bamboo shoots
@@ -184,6 +186,8 @@ Here are the tasks growing in your grove:
 Says goodbye and closes the window.
 
 Format: `bye`
+
+Example: `bye`
 
 ```text
 Bye. Time for my bamboo nap. Come back soon!
