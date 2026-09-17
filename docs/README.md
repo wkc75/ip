@@ -201,15 +201,15 @@ original file as `data/zhangwei.txt.corrupt`.
 
 ## Command summary
 
-| Command | Format |
-| --- | --- |
-| Todo | `todo DESCRIPTION` |
-| Deadline | `deadline DESCRIPTION /by DATE` |
-| Event | `event DESCRIPTION /from DATE /to DATE` |
-| List | `list` |
-| Mark | `mark TASK_NUMBER` |
-| Unmark | `unmark TASK_NUMBER` |
-| Delete | `delete TASK_NUMBER` |
-| Find | `find TEXT` |
-| Sort | `sort date`, `sort description` or `sort status` |
-| Exit | `bye` |
+| Command | Format | Example |
+| --- | --- | --- |
+| Todo | `todo DESCRIPTION` | `todo buy bamboo shoots` |
+| Deadline | `deadline DESCRIPTION /by DATE` | `deadline submit iP /by 2026-09-19` |
+| Event | `event DESCRIPTION /from DATE /to DATE` | `event CS2103T tutorial /from 2026-09-22 /to 2026-09-22` |
+| List | `list` | `list` |
+| Mark | `mark TASK_NUMBER` | `mark 1` |
+| Unmark | `unmark TASK_NUMBER` | `unmark 1` |
+| Delete | `delete TASK_NUMBER` | `delete 1` |
+| Find | `find TEXT` | `find ip` |
+| Sort | `sort date`, `sort description` or `sort status` | `sort date` |
+| Exit | `bye` | `bye` |
