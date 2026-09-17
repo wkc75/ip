@@ -29,6 +29,7 @@ Prerequisites: JDK 25, and the most recent version of IntelliJ.
 ## Building and running the JAR
 
 Prerequisites: JDK 25 (`sdk use java 25.0.3.fx-zulu` if you use SDKMAN).
+Run `java -version` first to confirm the terminal is using Java 25.
 
 Build the fat JAR, which contains the compiled classes and every runtime dependency:
 
