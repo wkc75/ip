@@ -23,7 +23,8 @@ the next time you open the app.
 Your tasks are saved in `data/zhangwei.txt`, inside the folder you ran the
 command from.
 
-Try `todo buy bamboo shoots`, then `list`, to see Wei at work.
+Try `todo buy bamboo shoots`, then `list`, to see Wei at work. Type `bye`
+when you are done.
 
 If Wei cannot understand a command, the reply appears in a highlighted bubble
 and says what went wrong, usually with an example of the right format.
