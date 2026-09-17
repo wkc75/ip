@@ -98,6 +98,8 @@ Here are the tasks growing in your grove:
 
 ## Marking a task as done: `mark`
 
+Marks a task as done, shown as `[X]` in `list`.
+
 Format: `mark TASK_NUMBER`
 
 Example: `mark 1`
@@ -108,6 +110,8 @@ Nice! This task is done, have a bamboo shoot:
 ```
 
 ## Marking a task as not done: `unmark`
+
+Marks a done task as not done again.
 
 Format: `unmark TASK_NUMBER`
 
